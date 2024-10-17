@@ -5,21 +5,22 @@ import {
   StyleSheet,
   View,
   TextInput,
+  SafeAreaView,
 } from 'react-native';
 import {NavigationProp} from '../navigation/NavigationProps';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import styles from '../styles/Main';
+/** Icons */
 import HomeIcon from '@assets/icon_home.svg';
 import ListIcon from '@assets/icon_order_list.svg';
 import LikeIcon from '@assets/icon_like.svg';
 import MyIcon from '@assets/icon_my.svg';
 
+import BottomSheet from '../components/BottomSheet';
+
 const Tab = createBottomTabNavigator();
 
 export default function Main({navigation}: NavigationProp): React.JSX.Element {
-  const navigateToStore = () => {
-    navigation.navigate('Store');
-  };
-
   const [selectedButtons, setSelectedButtons] = React.useState([
     false,
     false,
@@ -61,11 +62,7 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
           ))}
         </View>
       </View>
-      <View>
-        <Text style={styles.text} onPress={navigateToStore}>
-          Go to Store Information
-        </Text>
-      </View>
+      <BottomSheet navigation={navigation} />
     </View>
   );
 
@@ -88,96 +85,65 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
   );
 
   return (
-    <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: () => {
-          let IconComponent;
+    <SafeAreaView style={{flex: 1}}>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: () => {
+            let IconComponent;
 
-          if (route.name === 'Main') {
-            IconComponent = HomeIcon;
-          } else if (route.name === 'OrderList') {
-            IconComponent = ListIcon;
-          } else if (route.name === 'Likes') {
-            IconComponent = LikeIcon;
-          } else {
-            IconComponent = MyIcon; // MyIcon으로 변경
-          }
+            if (route.name === 'Main') {
+              IconComponent = HomeIcon;
+            } else if (route.name === 'OrderList') {
+              IconComponent = ListIcon;
+            } else if (route.name === 'Likes') {
+              IconComponent = LikeIcon;
+            } else {
+              IconComponent = MyIcon;
+            }
 
-          return <IconComponent width={24} height={24} />;
-        },
-      })}>
-      <Tab.Screen
-        name="Main"
-        component={MainScreen}
-        options={{tabBarLabel: '홈'}}
-      />
-      <Tab.Screen
-        name="OrderList"
-        component={OrderListScreen}
-        options={{tabBarLabel: '주문 목록'}}
-      />
-      <Tab.Screen
-        name="Likes"
-        component={LikesScreen}
-        options={{tabBarLabel: '찜 목록'}}
-      />
-      <Tab.Screen
-        name="My"
-        component={MyScreen}
-        options={{tabBarLabel: '내 정보'}}
-      />
-    </Tab.Navigator>
+            return (
+              <View>
+                <IconComponent width={24} height={24} />
+              </View>
+            );
+          },
+
+          tabBarLabelStyle: {
+            padding: 0,
+            margin: 0,
+            // borderWidth: 1,
+          },
+          tabBarStyle: {
+            height: 74,
+            paddingBottom: 0,
+          },
+          tabBarItemStyle: {
+            padding: 0,
+            // borderWidth: 1,
+            // height:74
+          },
+        })}>
+        <Tab.Screen
+          name="Main"
+          component={MainScreen}
+          options={{tabBarLabel: '홈'}}
+        />
+        <Tab.Screen
+          name="OrderList"
+          component={OrderListScreen}
+          options={{tabBarLabel: '주문 목록'}}
+        />
+        <Tab.Screen
+          name="Likes"
+          component={LikesScreen}
+          options={{tabBarLabel: '찜 목록'}}
+        />
+        <Tab.Screen
+          name="My"
+          component={MyScreen}
+          options={{tabBarLabel: '내 정보'}}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 30,
-    marginTop: 100,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    height: 42,
-    backgroundColor: '#E0E0E0',
-  },
-  searchBarContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 12,
-    paddingTop: 5.7,
-    paddingHorizontal: 25,
-    paddingBottom: 15,
-    width: '100%',
-    backgroundColor: '#fff',
-  },
-  buttonGroup: {
-    display: 'flex',
-    gap: 5,
-    flexDirection: 'row',
-  },
-  chip: {
-    paddingVertical: 3,
-    paddingHorizontal: 9,
-    borderRadius: 44,
-  },
-  chipContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 2,
-    alignItems: 'center',
-  },
-  iconBox: {
-    width: 16,
-    height: 16,
-    backgroundColor: '#9A9A9A',
-  },
-});
