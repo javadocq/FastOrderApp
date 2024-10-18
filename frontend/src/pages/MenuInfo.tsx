@@ -1,49 +1,64 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity} from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { NavigationProp } from '../navigation/NavigationProps';
 import styles from "../styles/MenuInfo";
+import StoreImg from "../components/StoreImg";
+import BottomButton from "../components/BottomButton";
+import Like from '../assets/icon_like.svg';
 
 export default function MenuInfo({ navigation }: NavigationProp):React.JSX.Element {
-    const [text, setText] = useState<string>('');
-
-    function handlerText(Request : string) {
-        setText(Request)
-    }
+    const [count, setCount] = useState(0);
+    
     function handleOrder() {
-        console.log(text);
+        console.log(count);
         navigation.navigate('Shopping');
     }
+
+    function handleMinus() {
+        if (count > 0) {
+            setCount(count - 1);
+        }
+    }
+    function handlePlus() {
+        setCount(count + 1);
+    }
+
+    function handleBack() {
+        navigation.navigate('Store')
+    }
+    function handleMoveShopping() {
+        navigation.navigate('Shopping')
+    }
     return (
-    <View style={styles.wrap}>
-        <View style={styles.storeImg}></View>
-        <View style={styles.storeInfo}>
-                <Text style={styles.menuName}>제육볶음</Text>
-                {/* svg 아이콘 들어갈 자리 */}
-                <View style={styles.InfoPrice}>
-                    <Text style={styles.price}>가격</Text>
-                    <Text style={styles.price}>7,000원</Text>
-                </View>
-        </View>
+    <SafeAreaView style={styles.container}>
+        <View style = {styles.wrap}>
+            <View style={styles.imgBox}>
+                <StoreImg onBack={handleBack} onShopping={handleMoveShopping} />
+            </View>
+            <View style={styles.storeBox}>
+                    <View style={styles.InfoBox}>
+                        <Text style={styles.menuName}>제육볶음</Text>
+                        <View>
+                            <Like />
+                        </View>
+                    </View>
+                    <View style={styles.InfoBox}>
+                        <Text style={styles.price}>가격</Text>
+                        <Text style={styles.price}>7,000원</Text>
+                    </View>
+            </View>
 
-        <View style={styles.padding}></View>
+            <View style={styles.padding}></View>
 
-        <View>
-            <Text style={styles.storeRequestText}>가게 요청사항</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="요청 입력"
-                placeholderTextColor="#484747"
-                onChangeText={handlerText}
-            />
+            <View style={styles.count}>
+                <Text style={styles.countText} onPress={handleMinus}>-</Text>
+                <Text style={styles.countText}>{count}</Text>
+                <Text style={styles.countText} onPress={handlePlus}>+</Text>
+            </View>
         </View>
-
-        <View style={styles.OrderButtonWrap}>
-          <TouchableOpacity style={styles.OrderButton} onPress={handleOrder}>
-            <Text style={styles.OrderButtonText}>주문하기</Text>
-          </TouchableOpacity>
-        </View>
-    </View>
+        <BottomButton name="주문하기" onPress={handleOrder} />
+    </SafeAreaView>
     )
 }   
 

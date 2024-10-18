@@ -1,87 +1,68 @@
 import { StyleSheet } from "react-native"
 
 const styles = StyleSheet.create({
-    wrap: {
+    container: {
         flexGrow: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        marginTop: '0%',
-        paddingBottom : '49%'
+        backgroundColor : '#FFF'
       },
-      storeImg: {
-        height: 157,
+      wrap : {
+        width : '100%',
+        height : '100%', 
+      },
+      imgBox : {
+        height : '18%'
+      },
+      storeBox: {
+        height: '15%',
         width: '100%',
-        backgroundColor: '#D9D9D9',
+        marginTop : '6%',
+        marginLeft: '8%',
       },
-      InfoPrice : {
-        flexDirection : 'row'
+      InfoBox : {
+        width : '83%',
+        flexDirection : 'row',
+        justifyContent : 'space-between'
       },
       menuName : {
         color : '#484747',
         fontSize : 20,
         fontStyle : 'normal',
         fontWeight : '600',
-        marginTop : '1%'
+        marginTop : '1%',
       },
       price : {
-        width : '70%',
         color : '#484747',
-        fontSize : 17,
+        fontSize : 18,
         fontStyle : 'normal',
         fontWeight : '600',
         marginTop : '10%',
-        justifyContent : 'flex-end'
       },
       padding: {
         width: '100%',
         height: 10,
         backgroundColor: '#D9D9D9',
       },
-      storeInfo: {
-        height: '16%',
-        width: '100%',
-        marginTop: 23,
-        marginLeft: '13%',
-      },
-      input: {
-        height: 49,
-        width: 325,
-        borderColor: '#D9D9D9',
+      count: {
         borderWidth: 1,
-        borderRadius : 5,
-        backgroundColor : 'rgb(217,217,217, 0.00)',
-        paddingLeft : 14
-      },
-      storeRequestText :{
-        color : '#484747',
-        fontSize : 14,
-        fontWeight : '500',
-        fontStyle : 'normal',
-        marginTop : 14,
-        marginBottom : '2%',
-        marginLeft : '1.5%'
-      },
-      OrderButtonWrap: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent : 'flex-end',
-        marginTop: '80%',
-      },
-      OrderButton: {
-        width: 325,
-        height: 51,
-        borderRadius: 50,
-        backgroundColor: '#D9D9D9',
+        borderColor: '#D9D9D9',
+        borderRadius: 5,
+        width: 75,
+        height: 25,
+        marginTop: 31,
+        marginLeft: 19,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        
+        gap: 12,
+        marginLeft : '9%'
       },
-      OrderButtonText: {
+      countText: {
         color: '#484747',
-        fontSize: 20,
+        fontSize: 14,
         fontStyle: 'normal',
-        fontWeight: '600',
+        fontWeight: '500',
       },
+
 });
 
 export default styles;

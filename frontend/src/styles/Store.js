@@ -4,12 +4,16 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container : {
       flexGrow : 1,
+      backgroundColor : '#FFF'
     },
     wrapper : {
     },
     wrap: {
       width : '100%',
       paddingBottom : '118%'
+    },
+    imgBox : {
+      height : '24%'
     },
     infoBox: {
       height: '27%',

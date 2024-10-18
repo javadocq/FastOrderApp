@@ -26,11 +26,19 @@ export default function Store({ navigation }: NavigationProp): React.JSX.Element
     navigation.navigate('MenuInfo');
   }
 
+  function handleMoveMain() {
+    navigation.navigate('Main')
+  }
+  function handleMoveShopping() {
+    navigation.navigate('Shopping')
+}
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.wrap}>
-        <StoreImg navigation={navigation} />
-
+        <View style={styles.imgBox}>
+          <StoreImg onBack={handleMoveMain} onShopping={handleMoveShopping} />
+        </View>
         <View style={styles.infoBox}>
 
           <View style={styles.infoText}>

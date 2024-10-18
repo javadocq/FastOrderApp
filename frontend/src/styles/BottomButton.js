@@ -7,6 +7,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#D9D9D9',
         justifyContent: 'center',
         alignItems: 'center',
+        position : 'absolute',
+        bottom : 0
     },
     buttonText: {
         color: '#464646',

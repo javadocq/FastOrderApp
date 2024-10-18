@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { NavigationProp } from '../navigation/NavigationProps';
-import { ScrollView } from "react-native-gesture-handler";
 import styles from "../styles/Shopping";
+import BackArrow from '../assets/icon_back_arrow.svg';
 import BottomButton from "../components/BottomButton";
 
 export default function Shopping({ navigation }: NavigationProp): React.JSX.Element {
     const [count, setCount] = useState(0);
     const orderMenu = [
-        { name: '제육볶음', price: '7,000원', img: '', remaining: '' },
-        { name: '제육볶음', price: '7,000원', img: '', remaining: '' }
-    ];
-    const otherMenu = [
-        { name: '제육볶음', price: '7,000원', img: '' },
-        { name: '제육볶음', price: '7,000원', img: '' }
+        { name: '제육볶음', price: '7,000원', img: ''},
+        { name: '김치찌개', price: '6,500원', img: ''},
+        { name: '된장찌개', price: '6,000원', img: ''}
     ];
 
     function handleMinus() {
@@ -21,6 +18,7 @@ export default function Shopping({ navigation }: NavigationProp): React.JSX.Elem
             setCount(count - 1);
         }
     }
+    
     function handlePlus() {
         setCount(count + 1);
     }
@@ -29,43 +27,47 @@ export default function Shopping({ navigation }: NavigationProp): React.JSX.Elem
         navigation.navigate('Pay');
     }
 
+    function handleBack() {
+        navigation.navigate('Store');
+    }
+
     return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.wrap}>
-                {/* 꺽새 이미지 */}
-                <Text style={styles.mainText}>장바구니</Text>
-
-                <View style={styles.padding}></View>
-
-                <Text style={styles.storeName}>찌개찌개 한양대 에리카 점</Text>
-
-                {orderMenu.map((item, index) => (
-                    <View key={index} style={styles.orderMenu}>
-                        <Text style={styles.menuName}>{item.name}</Text>
-                        <Text style={styles.menuPrice}>{item.price}</Text>
-                        <View style={styles.count}>
-                            <Text style={styles.countText} onPress={handleMinus}>-</Text>
-                            <Text style={styles.countText}>{count}</Text>
-                            <Text style={styles.countText} onPress={handlePlus}>+</Text>
-                        </View>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                <View style={styles.wrap}>
+                    <View style = {styles.wrapper}>
+                        <TouchableOpacity onPress={handleBack}>
+                            <BackArrow />
+                        </TouchableOpacity>
+                        <Text style={styles.mainText}>장바구니</Text>
                     </View>
-                ))}
-
-                <Text style={styles.togetherText}>함께 먹으면 좋아요</Text>
-
-                {otherMenu.map((item, index) => (
-                    <View key={index} style={styles.otherMenu}>
-                        <View style={styles.otherMenuImg}></View>
-                        <View>
-                            <Text style={styles.otherMenuName}>{item.name}</Text>
-                            <Text style={styles.otherMenuPrice}>{item.price}</Text>
-                        </View>
-                        {/* + button */}
+                    <View style={styles.padding}></View>
+                    <Text style={styles.storeName}>찌개찌개 한양대 에리카 점</Text>
+                    <View style={styles.menuBox}>
+                        {orderMenu.map((item, index) => (
+                            <View 
+                                key={index} 
+                                style={[
+                                    styles.orderMenu, 
+                                    index < orderMenu.length - 1 ? styles.withSeparator : styles.withoutSeparator
+                                ]}
+                            >
+                                <View>
+                                    <Text style={styles.menuName}>{item.name}</Text>
+                                    <Text style={styles.menuPrice}>{item.price}</Text>
+                                    <View style={styles.count}>
+                                        <Text style={styles.countText} onPress={handleMinus}>-</Text>
+                                        <Text style={styles.countText}>{count}</Text>
+                                        <Text style={styles.countText} onPress={handlePlus}>+</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.menuImg}></View>
+                            </View>
+                        ))}
                     </View>
-                ))}
+                </View>
             </ScrollView>
             <BottomButton name="28,000원 주문하기" onPress={handlePayPage}/>
-        </View>
-    )
+        </SafeAreaView>
+    );
 }
-
