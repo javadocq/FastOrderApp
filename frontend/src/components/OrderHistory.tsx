@@ -20,6 +20,7 @@ interface Store {
   store_name: string;
   store_logo: string;
   menus: Menu[];
+  store_id: number;
 }
 
 interface User {
@@ -87,6 +88,7 @@ export default function OrderHistory({
               menuName={menuName.toString()}
               store_logo={history.store_logo}
               is_wished={history.is_wished}
+              store_id={history.store_id}
             />
           );
         })}
