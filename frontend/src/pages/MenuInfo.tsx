@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity, Alert } from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { NavigationProp, RouteProp } from "../navigation/NavigationProps";
 import axios from "axios";
 import styles from "../styles/MenuInfo";
@@ -188,15 +188,33 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
         setCount(count + 1);
     }
 
+    function handleLike() {
+        setLikeChecked(!likeChecked);
+        const postFetchStoreLike = async () => {  //메뉴 아이디 넘겨줄 겁니다.
+              try {
+                const token = await getToken();
+                const response = await axios.post(`${BASE_URL}/user/wish`, {
+                  token : token,
+                  type : "menu",
+                  menu_id : menuId,
+                });
+                console.log(response.data);
+              } catch (error) {
+                console.log("Error during Store Like");
+              }
+        }
+        postFetchStoreLike();
+      }
+
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.wrap}>
+            <ScrollView style={styles.wrap}>
                 <StoreImg onBack={() => navigation.goBack()} onShopping={() => navigation.navigate("Shopping")} img={menu?.image} />
                 {menu && (
                     <View style={styles.storeBox}>
                         <View style={styles.InfoBox}>
                             <Text style={styles.menuName}>{menu.name}</Text>
-                            <TouchableOpacity onPress={() => setLikeChecked(!likeChecked)}>
+                            <TouchableOpacity onPress={() => handleLike()}>
                                 {likeChecked ? <FullLike /> : <EmptyLike />}
                             </TouchableOpacity>
                         </View>
@@ -206,7 +224,7 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
                 <View style={styles.padding}></View>
 
                 {options.map((option, idx) => (
-                    <View key={idx} style={{ marginTop: "5%", gap: 20, marginBottom: "5%" }}>
+                    <View key={idx} style={{ marginTop: "5%", gap: 20, marginBottom: "5%", alignItems : 'center' }}>
                         <View style={styles.flavoursBox}>
                             <Text style={styles.price}>{option.option.title}</Text>
                             <View style={option.option.is_required === "required" ? styles.round : styles.detailRound}>
@@ -237,6 +255,7 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
                                 <Text style={styles.flavoursPrice}>{`${formatPrice(detail.price)}원`}</Text>
                             </View>
                         ))}
+                        <View style={styles.paddingSecond}></View>
                     </View>
                 ))}
 
@@ -252,7 +271,7 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
             <BottomButton
                 name={`${formatPrice(calculateTotalPrice())}원 담기`}
                 onPress={handleOrder}

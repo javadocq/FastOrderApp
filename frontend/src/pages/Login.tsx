@@ -1,4 +1,4 @@
-import { storeToken, getToken } from '../components/UserToken';
+import { setToken, getToken } from '../components/UserToken';
 import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import UnCheckedBox from '../assets/icon_unchecked_box.svg';
@@ -37,7 +37,7 @@ export default function Login({navigation}: LoginProps): React.JSX.Element {
       );
       console.log(response.data);
       const token = response.data.token; // 서버에서 반환하는 토큰
-      storeToken(token);
+      setToken(token);
       const userToken = await getToken();
       console.log(userToken);
       navigation.navigate('BottomNavigation'); // 성공적으로 가입한 후 메인 페이지로 이동

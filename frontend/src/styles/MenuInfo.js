@@ -3,12 +3,11 @@ import { StyleSheet } from "react-native"
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        backgroundColor : '#FFF'
+        backgroundColor : '#FFF',
       },
       wrap : {
         width : '100%',
         height : '100%', 
-        alignItems : 'center'
       },
       storeBox: {
         height: '10%',
@@ -93,6 +92,7 @@ const styles = StyleSheet.create({
         alignItems : 'center',
         justifyContent : 'space-between',
         width : '85%',
+        marginLeft : '8%',
       },
       count: {
         borderWidth: 1,
@@ -100,8 +100,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: 85,
         height: 30,
-        marginTop: 31,
-        marginLeft: 19,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

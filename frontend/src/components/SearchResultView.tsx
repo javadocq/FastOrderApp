@@ -9,6 +9,7 @@ import DetailIcon from '../assets/icon_details.svg';
 import styles from '../styles/SearchResultView';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {NavigationProp} from '../navigation/NavigationProps';
+import { getSearch, setSearch } from './SearchStorage';
 
 interface SearchProp {
   searchText: string;
@@ -29,10 +30,20 @@ export default function SearchResultView({
 }: CombinedProp) {
   const [stores, setStores] = useState<StoreProp[]>([]);
 
-  const navigateToStore = (storeId: number) => {
-    console.log(storeId);
-    navigation.navigate('Store', {storeId}); // 수정된 부분: store_id를 직접 전달
-  };
+  async function navigateToStore(storeId: number, storeName: string) {
+    try {
+        await setSearch(storeName); // 유효한 검색어만 저장
+        console.log("Fetched");
+
+        // 저장된 검색어 확인
+      const storedSearches = await getSearch();
+      console.log("Stored Searches:", storedSearches); // 저장된 값 확인
+        // 스토어 화면으로 이동 
+      navigation.navigate('Store', { storeId });
+    } catch (error) {
+        console.error("Failed to save search and navigate:", error);
+    }
+}
 
   useEffect(() => {
     const getSearchResult = async (keyword: string) => {
@@ -62,10 +73,10 @@ export default function SearchResultView({
             <TouchableOpacity
               key={index}
               style={styles.itemContainer}
-              onPress={() => navigateToStore(store.store_id)}>
+              onPress={() => navigateToStore(store.store_id, store.store_name)}>
               <View style={styles.leftWrapper}>
                 <Image
-                  source={{uri: `${BASE_URL}/media/${store.logo}`}}
+                  source={{uri: store.logo}}
                   style={styles.img}
                 />
                 <View style={styles.storeNameWrapper}>
