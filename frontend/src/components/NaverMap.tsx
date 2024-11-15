@@ -26,6 +26,7 @@ interface Store {
   store_type: string;
   latitude: string;
   longitude: string;
+  store_status: string;
 }
 
 interface StoreProp {
@@ -43,6 +44,13 @@ const JapanMarker = require('../assets/marker_japan.png');
 const ChinaMarker = require('../assets/marker_china.png');
 const WesternMarker = require('../assets/marker_western.png');
 const EtcMarker = require('../assets/marker_etc.png');
+
+const GrayCafeMarker = require('../assets/gray_marker_cafe.png');
+const GrayKoreaMarker = require('../assets/gray_marker_korea.png');
+const GrayJapanMarker = require('../assets/gray_marker_japan.png');
+const GrayChinaMarker = require('../assets/gray_marker_china.png');
+const GrayWesternMarker = require('../assets/gray_marker_western.png');
+const GrayEtcMarker = require('../assets/gray_marker_etc.png');
 
 export default function NaverMap({
   navigation,
@@ -77,6 +85,23 @@ export default function NaverMap({
     }
   };
 
+  const getGrayMarkerImage = (storeType: string) => {
+    switch (storeType) {
+      case '한식':
+        return GrayKoreaMarker;
+      case '일식':
+        return GrayJapanMarker;
+      case '중식':
+        return GrayChinaMarker;
+      case '양식':
+        return GrayWesternMarker;
+      case '카페':
+        return GrayCafeMarker;
+      default:
+        return GrayEtcMarker; // 기본적으로 카페 마커
+    }
+  };
+
   return (
     <View style={styles.container}>
       <NaverMapView
@@ -90,7 +115,11 @@ export default function NaverMap({
             longitude={parseFloat(store.longitude)}
             width={44}
             height={48}
-            image={getMarkerImage(store.store_type)}
+            image={
+              store.store_status == 'Open'
+                ? getMarkerImage(store.store_type)
+                : getGrayMarkerImage(store.store_type)
+            }
             onTap={() => onMarkerPress(store.no)}
           />
         ))}

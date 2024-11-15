@@ -45,6 +45,7 @@ interface Store {
   latitude: string;
   longitude: string;
   store_type: string;
+  store_status: string;
 }
 
 export default function Main({navigation}: NavigationProp): React.JSX.Element {
