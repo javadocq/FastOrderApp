@@ -11,6 +11,7 @@ import MenuInfo from './src/pages/MenuInfo';
 import Shopping from './src/pages/Shopping';
 import Pay from './src/pages/Pay';
 import Reception from './src/pages/Reception';
+import SearchResultView from './src/components/SearchResultView';
 
 /** Components */
 import BottomNavigation from './src/components/BottomNavigation';
@@ -71,6 +72,11 @@ export default function App(): React.JSX.Element {
           <Stack.Screen
             name="Reception"
             component={Reception}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SearchResultView"
+            component={SearchResultView}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

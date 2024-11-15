@@ -29,9 +29,9 @@ export default function SearchResultView({
 }: CombinedProp) {
   const [stores, setStores] = useState<StoreProp[]>([]);
 
-  const navigateToStore = (store_id: number) => {
-    console.log(store_id);
-    navigation.navigate('Store', {store_id}); // 수정된 부분: store_id를 직접 전달
+  const navigateToStore = (storeId: number) => {
+    console.log(storeId);
+    navigation.navigate('Store', {storeId}); // 수정된 부분: store_id를 직접 전달
   };
 
   useEffect(() => {
