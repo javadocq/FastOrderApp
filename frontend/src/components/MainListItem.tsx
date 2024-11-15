@@ -32,7 +32,7 @@ export default function MainListItem({
   store_logo,
   is_wished,
   storeId,
-  updateWishStatus, // props로 전달된 상태 업데이트 함수
+  updateWishStatus,
 }: CombinedInterface): React.JSX.Element {
   const [likeChecked, setLikeChecked] = useState<boolean>(is_wished);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -54,15 +54,15 @@ export default function MainListItem({
     if (likeChecked) {
       setModalVisible(true);
     } else {
-      setLikeChecked(true); // 상태를 true로 변경
-      updateWishStatus(storeId, true); // 상태 업데이트 호출
-      postLikes(); // 서버에 좋아요 추가 요청
+      setLikeChecked(true);
+      updateWishStatus(storeId, true);
+      postLikes();
     }
   };
 
   const confirmLike = () => {
-    setLikeChecked(false); // 상태를 false로 변경
-    updateWishStatus(storeId, false); // 상태 업데이트 호출
+    setLikeChecked(false);
+    updateWishStatus(storeId, false);
     setModalVisible(false);
   };
 
