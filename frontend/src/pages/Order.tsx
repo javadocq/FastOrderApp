@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 import {NavigationProp} from '../navigation/NavigationProps';
 import axios from 'axios';
 
@@ -30,22 +36,38 @@ interface Menu {
 export default function Order({navigation}: NavigationProp): React.JSX.Element {
   const [historys, setHistorys] = useState<Store[]>([]);
   const [editButton, setEditButton] = useState(false);
+  const [startIndex, setStartIndex] = useState(0); // 현재 인덱스 상태 추가
+  const [loading, setLoading] = useState(false); // 로딩 상태 추가
 
   useEffect(() => {
-    const getSearchResult = async () => {
-      try {
-        const token = await getToken();
-        const response = await axios.get(
-          `${BASE_URL}/orders/history?token=${token}`,
-        );
-
-        setHistorys(response.data.order_history);
-      } catch (e) {
-        console.log('Search Result Error: ', e);
-      }
-    };
     getSearchResult();
   }, []);
+
+  const getSearchResult = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const token = await getToken();
+      const response = await axios.get(
+        `${BASE_URL}/orders/history?token=${token}&start_index=${startIndex}&count=6`,
+      );
+      setHistorys(prev => [...prev, ...response.data.order_history]);
+      setStartIndex(prev => prev + 10);
+    } catch (e) {
+      console.log('Search Result Error: ', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {contentOffset, layoutMeasurement, contentSize} = event.nativeEvent;
+    const isAtBottom =
+      contentOffset.y >= contentSize.height - layoutMeasurement.height - 20; // 약간의 여유를 두기 위한 20
+    if (isAtBottom) {
+      getSearchResult(); // 바닥에 도달했을 때 추가 데이터 요청
+    }
+  };
 
   const toggleEditButton = () => {
     setEditButton(prevEditButton => !prevEditButton);
@@ -75,7 +97,9 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
 
       <ScrollView
         style={styles.orderListContainer}
-        contentContainerStyle={{paddingVertical: 10}}>
+        contentContainerStyle={{paddingVertical: 10}}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}>
         {historys.map((history, index) => {
           const menuCount = history.menus.length;
           const menuName =
