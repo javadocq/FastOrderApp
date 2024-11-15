@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Text, View} from 'react-native';
+import {TouchableOpacity, Text, View, Image} from 'react-native';
 import {NavigationProp} from '../navigation/NavigationProps';
+/** Consts */
+import {BASE_URL} from '../consts/Url';
 /** Icons */
 import DetailIcon from '@assets/icon_details.svg';
 import EmptyLikeIcon from '@assets/icon_empty_like.svg';
@@ -14,6 +16,8 @@ interface MainListProp {
   progress: string;
   storeName: string;
   menuName: string;
+  store_logo: string;
+  is_wished: boolean;
 }
 
 interface CombinedInterface extends NavigationProp, MainListProp {}
@@ -24,6 +28,8 @@ export default function MainListItem({
   progress,
   storeName,
   menuName,
+  store_logo,
+  is_wished,
 }: CombinedInterface): React.JSX.Element {
   const [likeChecked, setLikeChecked] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -57,13 +63,17 @@ export default function MainListItem({
         </View>
         <View style={styles.likeIconBox}>
           <TouchableOpacity onPress={handleLikePress}>
-            {likeChecked ? <FullLikeIcon /> : <EmptyLikeIcon />}
+            {is_wished ? <FullLikeIcon /> : <EmptyLikeIcon />}
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.historyContainer}>
         {/* left */}
-        <View style={styles.storeImg}></View>
+        {/* <View style={styles.storeImg}></View> */}
+        <Image
+          source={{uri: `${BASE_URL}/media/${store_logo}`}}
+          style={styles.storeImg}
+        />
         {/* right */}
         <View style={styles.orderContainer}>
           <View style={styles.storeWrapper}>

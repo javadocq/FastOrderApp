@@ -85,6 +85,8 @@ export default function OrderHistory({
               progress={history.order_status}
               storeName={history.store_name}
               menuName={menuName.toString()}
+              store_logo={history.store_logo}
+              is_wished={history.is_wished}
             />
           );
         })}
