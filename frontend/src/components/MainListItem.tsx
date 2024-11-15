@@ -18,6 +18,7 @@ interface MainListProp {
   store_logo: string;
   is_wished: boolean;
   store_id: number;
+  updateWishStatus: (storeId: number, newStatus: boolean) => void; // 상태 업데이트 함수 타입 정의
 }
 
 interface CombinedInterface extends NavigationProp, MainListProp {}
@@ -31,12 +32,13 @@ export default function MainListItem({
   store_logo,
   is_wished,
   store_id,
+  updateWishStatus, // props로 전달된 상태 업데이트 함수
 }: CombinedInterface): React.JSX.Element {
-  const [likeChecked, setLikeChecked] = useState<boolean>(is_wished); // 초기값 설정
+  const [likeChecked, setLikeChecked] = useState<boolean>(is_wished);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    setLikeChecked(is_wished); // props가 변경될 때 상태 업데이트
+    setLikeChecked(is_wished);
   }, [is_wished]);
 
   const navigateToPay = () => {
@@ -48,12 +50,14 @@ export default function MainListItem({
       setModalVisible(true);
     } else {
       setLikeChecked(true); // 상태를 true로 변경
+      updateWishStatus(store_id, true); // 상태 업데이트 호출
       postLikes(); // 서버에 좋아요 추가 요청
     }
   };
 
   const confirmLike = () => {
     setLikeChecked(false); // 상태를 false로 변경
+    updateWishStatus(store_id, false); // 상태 업데이트 호출
     setModalVisible(false);
   };
 
@@ -90,10 +94,7 @@ export default function MainListItem({
         </View>
       </View>
       <View style={styles.historyContainer}>
-        <Image
-          source={{uri: `${BASE_URL}/media/${store_logo}`}}
-          style={styles.storeImg}
-        />
+        <Image source={{uri: `${store_logo}`}} style={styles.storeImg} />
         <View style={styles.orderContainer}>
           <View style={styles.storeWrapper}>
             <Text style={styles.storeText}>{storeName}</Text>

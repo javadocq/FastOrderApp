@@ -23,10 +23,6 @@ interface Store {
   store_id: number;
 }
 
-interface User {
-  user_name: string;
-}
-
 interface Menu {
   menu_name: string;
 }
@@ -41,24 +37,28 @@ export default function OrderHistory({
     const getSearchResult = async () => {
       try {
         const token = await getToken();
-        console.log('token ', token);
-
         const response = await axios.get(
           `${BASE_URL}/orders/history?token=${token}`,
         );
 
-        console.log('data  ', response.data);
-
         setHistorys(response.data.order_history);
         setUserName(response.data.user_name);
-        console.log('order history ', historys);
-        console.log('user name ', userName);
       } catch (e) {
         console.log('Search Result Error: ', e);
       }
     };
-    getSearchResult(); // 함수 호출
+    getSearchResult();
   }, []);
+
+  const updateWishStatus = (storeId: number, newStatus: boolean) => {
+    setHistorys(prevHistory =>
+      prevHistory.map(history =>
+        history.store_id === storeId
+          ? {...history, is_wished: newStatus}
+          : history,
+      ),
+    );
+  };
 
   return (
     <View>
@@ -76,8 +76,6 @@ export default function OrderHistory({
               ? history.menus[0].menu_name
               : `${history.menus[0].menu_name} 외 ${menuCount - 1}개`;
 
-          console.log('menuName ', menuName);
-
           return (
             <MainListItem
               key={index}
@@ -89,6 +87,7 @@ export default function OrderHistory({
               store_logo={history.store_logo}
               is_wished={history.is_wished}
               store_id={history.store_id}
+              updateWishStatus={updateWishStatus} // 상태 업데이트 함수 전달
             />
           );
         })}
