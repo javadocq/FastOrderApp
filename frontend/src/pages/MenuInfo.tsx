@@ -155,7 +155,7 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
                 .find(([, isSelected]) => isSelected);
     
             if (isDuplicateAllowed === "No" && groupSelected && !prev[`${optionGroupNo}_${optionTitle}`]) {
-                Alert.alert("이 옵션은 그룹 내에서 하나만 선택할 수 있습니다.");
+                Alert.alert("한 가지 옵션만 선택 가능합니다.");
                 return prev;
             }
     
