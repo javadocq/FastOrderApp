@@ -113,8 +113,8 @@ export default function NaverMap({
             key={store.no}
             latitude={parseFloat(store.latitude)}
             longitude={parseFloat(store.longitude)}
-            width={44}
-            height={48}
+            width={store.store_status === 'Open' ? 44 : 32}
+            height={store.store_status === 'Open' ? 48 : 36}
             image={
               store.store_status == 'Open'
                 ? getMarkerImage(store.store_type)
