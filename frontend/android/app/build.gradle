@@ -119,6 +119,8 @@ dependencies {
     }
     implementation("com.naver.maps:map-sdk:3.19.1")
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-messaging") // Firebase Messaging 추가
+
 }
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
