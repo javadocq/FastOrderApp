@@ -17,7 +17,7 @@ interface MainListProp {
   menuName: string;
   store_logo: string;
   is_wished: boolean;
-  store_id: number;
+  storeId: number;
   updateWishStatus: (storeId: number, newStatus: boolean) => void; // 상태 업데이트 함수 타입 정의
 }
 
@@ -31,7 +31,7 @@ export default function MainListItem({
   menuName,
   store_logo,
   is_wished,
-  store_id,
+  storeId,
   updateWishStatus, // props로 전달된 상태 업데이트 함수
 }: CombinedInterface): React.JSX.Element {
   const [likeChecked, setLikeChecked] = useState<boolean>(is_wished);
@@ -45,19 +45,24 @@ export default function MainListItem({
     navigation.navigate('Pay');
   };
 
+  const navigateToStore = () => {
+    console.log('store id ', storeId);
+    navigation.navigate('Store', {storeId});
+  };
+
   const handleLikePress = () => {
     if (likeChecked) {
       setModalVisible(true);
     } else {
       setLikeChecked(true); // 상태를 true로 변경
-      updateWishStatus(store_id, true); // 상태 업데이트 호출
+      updateWishStatus(storeId, true); // 상태 업데이트 호출
       postLikes(); // 서버에 좋아요 추가 요청
     }
   };
 
   const confirmLike = () => {
     setLikeChecked(false); // 상태를 false로 변경
-    updateWishStatus(store_id, false); // 상태 업데이트 호출
+    updateWishStatus(storeId, false); // 상태 업데이트 호출
     setModalVisible(false);
   };
 
@@ -72,7 +77,7 @@ export default function MainListItem({
       const response = await axios.post(`${BASE_URL}/user/wish`, {
         token: token,
         type: 'store',
-        store_id: store_id,
+        store_id: storeId,
       });
       console.log(response.data);
     } catch (error) {
@@ -96,12 +101,14 @@ export default function MainListItem({
       <View style={styles.historyContainer}>
         <Image source={{uri: `${store_logo}`}} style={styles.storeImg} />
         <View style={styles.orderContainer}>
-          <View style={styles.storeWrapper}>
+          <TouchableOpacity
+            style={styles.storeWrapper}
+            onPress={navigateToStore}>
             <Text style={styles.storeText}>{storeName}</Text>
             <View style={styles.detailIconBox}>
               <DetailIcon />
             </View>
-          </View>
+          </TouchableOpacity>
           <Text style={styles.menuText}>{menuName}</Text>
         </View>
       </View>

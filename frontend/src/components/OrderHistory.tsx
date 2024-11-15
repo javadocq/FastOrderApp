@@ -86,7 +86,7 @@ export default function OrderHistory({
               menuName={menuName.toString()}
               store_logo={history.store_logo}
               is_wished={history.is_wished}
-              store_id={history.store_id}
+              storeId={history.store_id}
               updateWishStatus={updateWishStatus} // 상태 업데이트 함수 전달
             />
           );
