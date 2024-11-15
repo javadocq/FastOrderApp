@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, Text, View} from 'react-native';
+import {TouchableOpacity, Text, View, Image} from 'react-native';
 import axios from 'axios';
 import {getToken} from '../components/UserToken';
 /** Consts */
@@ -40,6 +40,7 @@ export default function OrderListItem({
   progress,
   storeName,
   menuName,
+  store_logo,
   editButtonClicked,
   is_wished,
   storeId,
@@ -106,7 +107,7 @@ export default function OrderListItem({
       </View>
       <View style={styles.historyContainer}>
         {/* left */}
-        <View style={styles.storeImg}></View>
+        <Image source={{uri: store_logo}} style={styles.storeImg} />
         {/* right */}
         <View style={styles.orderContainer}>
           <View style={styles.orderLeftWrapper}>
