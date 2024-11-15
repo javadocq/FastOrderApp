@@ -18,13 +18,6 @@ const styles = StyleSheet.create({
     gap: 4,
     marginTop: 12,
   },
-  chipBox: {
-    borderWidth: 1,
-    borderColor: '#BDBDBD4D',
-    borderRadius: 44,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-  },
 });
 
 export default styles;

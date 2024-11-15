@@ -26,6 +26,7 @@ import CafeIcon from '@assets/icon_food_cafe.svg';
 import BottomSheet from '../components/BottomSheet';
 import NaverMap from '../components/NaverMap';
 import SearchView from '../components/SearchView';
+import SearchResultView from '../components/SearchResultView';
 
 // 아이콘 매핑 정의
 const foodIcons = {
@@ -54,6 +55,7 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
   const foodTypes = Object.keys(foodIcons) as (keyof typeof foodIcons)[];
   const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     setSelectedButtonIndex(0);
@@ -69,6 +71,7 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
       'keyboardDidHide',
       () => {
         setIsKeyboardVisible(false);
+        setSearchText(''); // 키보드 숨길 때 검색어 초기화
       },
     );
 
@@ -133,9 +136,12 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
             autoFocus={true}
             onFocus={() => setIsKeyboardVisible(true)}
             onBlur={() => setIsKeyboardVisible(false)}
+            onChangeText={setSearchText} // 텍스트 변경 시 상태 업데이트
+            value={searchText} // 텍스트 상태 바인딩
           />
           <CartIcon onPress={navigateToShopping} />
         </View>
+        {/* 키보드가 안 보일 때 칩그룹 숨기기 */}
         {isKeyboardVisible ? (
           <></>
         ) : (
@@ -165,9 +171,12 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
           </ScrollView>
         )}
       </View>
-      {/* 키보드가 보일 때 NaverMap과 BottomSheet 숨기기 */}
       {isKeyboardVisible ? (
-        <SearchView />
+        searchText.length > 0 ? (
+          <SearchResultView navigation={navigation} searchText={searchText} />
+        ) : (
+          <SearchView />
+        )
       ) : (
         <>
           <NaverMap
