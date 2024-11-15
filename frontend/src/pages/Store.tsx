@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { NavigationProp, RouteProp } from '../navigation/NavigationProps'; 
 import { BASE_URL } from '../consts/Url';
+import { getToken } from '../components/UserToken';
 import EmptyLike from '../assets/icon_empty_like.svg';
 import FullLike from '../assets/icon_full_like.svg';
 import Location from '../assets/icon_location.svg';
@@ -22,7 +23,7 @@ import styles from '../styles/Store';
 interface MenuItem {
   no: number;
   name: string;
-  image: string | null; // 이미지가 null일 수도 있으므로
+  image: string
   price: number;
   description: string;
   min_quantity: number;
@@ -36,7 +37,7 @@ interface StoreInfo {
   business_hours: string | null; // 영업시간, null일 수 있음
   description: string | null; // 설명, null일 수 있음
   location: string; // 위치
-  logo: string | null; // 로고 이미지 URL, null일 수 있음
+  logo: string 
   no: number; // 가게 번호
   phone_number: string | null; // 전화번호, null일 수 있음
   ready_time12: string | null; // 1인분 준비 시간, null일 수 있음
@@ -53,32 +54,24 @@ type StoreProps = NavigationProp & RouteProp;
 export default function Store({ navigation, route }: StoreProps): React.JSX.Element {
   const { storeId } = route.params;
   const [likeChecked, setLikeChecked] = useState<boolean>(false);
-  const titleImg = require('../assets/jjiggajjigga_title.png'); // require로 임포트
-  const menuImg = require('../assets/menu_title.png'); // require로 임포트
   const [store, setStore] = useState<StoreInfo | null>(null); // StoreInfo 객체로 초기화
-  const [menu, setMenu] = useState<MenuItem[]>([
-    {name : '제육', price : 7000, image : null, min_quantity :0, max_quantity : 99, is_soldout : 0, store : 1002, description : 'dd', no : 5}
-  ]);
+  const [menu, setMenu] = useState<MenuItem[]>([]);
   useEffect(() => {
         const getFetchStoreMenu = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/stores/id/${storeId}`);
-                // 응답이 배열인지 확인하고 설정
-                console.log(response.data);
-                const formattedMenu = response.data.menu_data;
-                setMenu(formattedMenu);
-                setStore(response.data.store_data);
-              
-                console.log(menu);
-                console.log(store);
+              const token = await getToken();
+              const response = await axios.get(`${BASE_URL}/stores/id/${storeId}?token=${token}`);
+              const formattedMenu = await response.data.menu_data;
+              setLikeChecked(response.data.is_wished);
+              setMenu(formattedMenu);
+              setStore(response.data.store_data);
+              console.log(JSON.stringify(response.data, null, 2));
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
         };
         getFetchStoreMenu();
     }, [])
-
-  
     
   const formatPrice = (price:number) => {
       return new Intl.NumberFormat("ko-KR").format(price);
@@ -96,17 +89,20 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
   }
   function handleLike() {
     setLikeChecked(!likeChecked);
-    // const postFetchStoreLike = async () => {  //가게 아이디 넘겨줄 겁니다.
-    //     if (likeChecked) {
-    //       try {
-    //         const response = await axios.post(`${BASE_URL}/stores/like`, {
-    //           store_id = store_id;
-    //         });
-    //       } catch (error) {
-    //         console.log("Error during Store Like");
-    //       }
-    //     }
-    //   };
+    const postFetchStoreLike = async () => {  //가게 아이디 넘겨줄 겁니다.
+          try {
+            const token = await getToken();
+            const response = await axios.post(`${BASE_URL}/user/wish`, {
+              token : token,
+              type : "store",
+              store_id : storeId,
+            });
+            console.log(response.data);
+          } catch (error) {
+            console.log("Error during Store Like");
+          }
+    }
+    postFetchStoreLike();
   }
 
 
@@ -114,7 +110,7 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.wrap}>
-          <StoreImg onBack={handleBack} onShopping={handleMoveShopping} img={titleImg}/>
+          <StoreImg onBack={handleBack} onShopping={handleMoveShopping} img={store?.logo}/>
           <View style={styles.infoBox}>
 
             <View style={styles.infoTopText}>
@@ -165,7 +161,7 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
                   <Text style={styles.menuPrice}>{`${formatPrice(item.price)}원`}</Text>
                 </View>
                 <View style={styles.menuImg}>
-                  <Image source={menuImg} style={{height : '100%', width : '100%'}}/>
+                  <Image source={{uri : item.image}} style={{height : '100%', width : '100%'}}/>
                 </View>
               </TouchableOpacity>
             ))}

@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingLeft: 25,
     paddingVertical: 15,
+    position: 'relative',
   },
   storeName: {
     color: '#484747',
@@ -24,6 +25,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
+  cancelIcon : {
+    position : 'absolute',
+    right : 25,
+  }
 });
 
 export default styles;

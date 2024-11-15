@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 /** Style */
 import styles from '../styles/Likes';
@@ -10,37 +10,39 @@ import {ScrollView} from 'react-native-gesture-handler';
 import LikesStoreHeader from '../components/LikesStoreHeader';
 /** Props */
 import {NavigationProp} from '../navigation/NavigationProps';
+import axios from 'axios';
+import { BASE_URL } from '../consts/Url';
+import { getToken } from '../components/UserToken';
+
+interface Menu {
+  menu_name: string;
+  menu_price: number;
+  menu_image_url: string;
+}
+
+interface Store {
+  user_id : string;
+  store_name: string;
+  store_description: string | null;
+  menus: Menu[];
+}
 
 export default function Likes({navigation}: NavigationProp): React.JSX.Element {
-  const [likesMenu, setLikesMenu] = useState([
-    {
-      storeName: '백소정 안산 한양대점',
-      storeType: '일식당',
-      menus: [
-        {name: '제육볶음', price: '7,000원', img: ''},
-        {name: '쭈꾸미', price: '10,000원', img: ''},
-        {name: '마라떡볶이', price: '14,000원', img: ''},
-      ],
-    },
-    {
-      storeName: '마라미방 안산 한양대점',
-      storeType: '중식당',
-      menus: [
-        {name: '마라탕', price: '7,000원', img: ''},
-        {name: '홍소육덮밥', price: '8,000원', img: ''},
-        {name: '양고기덮밥', price: '8,000원', img: ''},
-      ],
-    },
-    {
-      storeName: '백소정 안산 한양대점',
-      storeType: '일식당',
-      menus: [
-        {name: '제육볶음', price: '7,000원', img: ''},
-        {name: '쭈꾸미', price: '10,000원', img: ''},
-        {name: '마라떡볶이', price: '14,000원', img: ''},
-      ],
-    },
-  ]);
+  const [likesMenu, setLikesMenu] = useState<Store []>([]);
+  const [userName, setUserName] = useState<string>("");
+  useEffect(() => {
+      const getFetchLikes = async() => {
+        try {
+          const token = await getToken();
+          const response = await axios.get(`${BASE_URL}/user/wishlist?token=${token}`);
+          setLikesMenu(response.data);
+          setUserName(response.data[0].user_id);
+        } catch(error) {
+          console.log(error);
+        }
+      };
+      getFetchLikes();
+  }, [])
 
   const [editButton, setEditButton] = useState(false);
 
@@ -49,9 +51,30 @@ export default function Likes({navigation}: NavigationProp): React.JSX.Element {
     console.log('edit button pressed');
   };
 
+  function handleRemoveStore(storeIndex : number) {
+    setLikesMenu((prev => {
+      const updatedStores = [...prev];
+      updatedStores.splice(storeIndex, 1);
+      return updatedStores;
+    }))
+  }
+
+  function handleRemoveMenu(storeIndex : number, menuIndex : number) {
+    setLikesMenu((prev) => {
+      const updatedStores = [...prev];
+      updatedStores[storeIndex].menus.splice(menuIndex, 1);
+
+      if(updatedStores[storeIndex].menus.length === 0) {
+        updatedStores.splice(storeIndex,1);
+      }
+
+      return updatedStores;
+    })
+  }
+
   return (
     <View style={styles.container}>
-      <AppbarSmall title="ㅇㅇ님의 찜" navigation={navigation} />
+      <AppbarSmall title={`${userName}님의 찜`} navigation={navigation} />
       <View style={[styles.divider, {height: 2}]}></View>
       <View style={styles.editWrapper}>
         <TouchableOpacity style={styles.editButton} onPress={toggleEditButton}>
@@ -59,19 +82,21 @@ export default function Likes({navigation}: NavigationProp): React.JSX.Element {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.contentContainer}>
-        {likesMenu.map((item, index) => (
-          <View key={index}>
+        {likesMenu.map((item, storeIndex) => (
+          <View key={storeIndex}>
             <LikesStoreHeader
-              storeName={item.storeName}
-              storeType={item.storeType}
+              storeName={item.store_name}
+              storeDescription={item.store_description}
+              onRemoveStore={() => handleRemoveStore(storeIndex)}
             />
             {item.menus.map((menu, menuIndex) => (
               <LikesListItem
                 key={menuIndex}
-                name={menu.name}
-                price={menu.price}
-                img={menu.img}
+                name={menu.menu_name}
+                price={menu.menu_price}
+                img={menu.menu_image_url}
                 editButtonClicked={editButton}
+                onRemoveMenu={() => handleRemoveMenu(storeIndex, menuIndex)}
               />
             ))}
           </View>

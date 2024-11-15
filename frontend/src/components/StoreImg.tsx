@@ -7,7 +7,7 @@ import styles from '../styles/StoreImg';
 interface StoreImgProps {
   onBack: () => void;
   onShopping: () => void;
-  img: ImageSourcePropType; // 문자열 경로를 받을 수 있도록 설정
+  img: string | undefined;  // 문자열 경로를 받을 수 있도록 설정
 }
 
 export default function StoreImg({ onBack, onShopping, img }: StoreImgProps): React.JSX.Element {
@@ -20,7 +20,10 @@ export default function StoreImg({ onBack, onShopping, img }: StoreImgProps): Re
         <TouchableOpacity onPress={onShopping} style={styles.cartImg}>
           <ShoppingCartIcon color='White'/>
         </TouchableOpacity>
-        <Image source={img} style={styles.img}/>
+        {img !== undefined ? (
+        <Image source={{uri: img}} style={styles.img}/>
+        ) : <View></View>
+        }
       </View>
     );
 }

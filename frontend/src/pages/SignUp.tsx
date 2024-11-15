@@ -24,7 +24,7 @@ export default function SignUp({navigation}: NavigationProp):React.JSX.Element {
     const [compareViewAuth, setCompareViewAuth] = useState<boolean>(false);
     const [checkedAuthentication, setCheckedAuthentication] = useState<boolean>(false); //인증번호 맞는지 T/F변수
     const [comparePW, setComparePW] = useState<boolean>(false); //비밀번호 같은지 확인
-    const [authenticationId, setAuthenticationId] = useState<string>("2"); //id 중복확인
+    const [authenticationId, setAuthenticationId] = useState<boolean>(false); //id 중복확인
 
     
     const getFetchSignup = async () => {
@@ -124,27 +124,25 @@ export default function SignUp({navigation}: NavigationProp):React.JSX.Element {
     }
 
     function handleDuplicate() {
-            //  const Duplicate = async () => {
-            //     if (id) {
-            //       try {
-            //         const response = await axios.post(`${BASE_URL}/api/users/`, {
-            //           id : id //보낼 변수
-            //         });
+             const Duplicate = async () => {
+                if (id) {
+                  try {
+                    const response = await axios.get(`${BASE_URL}/check-id?id=${id}`);
                     
-            //         if(response.data) {
-            //           setAuthenticationId(id);
-            //         }
-            //         Alert.alert("사용하셔도 되는 아이디 입니다.")
-            //       } catch (error) {
-            //         Alert.alert("중복된 아이디 입니다.")
-            //       }
-            //     }
-            //   }; 
+                    if(response.data) {
+                      setAuthenticationId(response.data);
+                    }
+                    Alert.alert("사용하셔도 되는 아이디 입니다.")
+                  } catch (error) {
+                    Alert.alert("중복된 아이디 입니다.")
+                  }
+                }
+              }; 
     }
 
 
     function handleLoginPage() {
-        if(comparePW && checkedAuthentication) {
+        if(comparePW && checkedAuthentication && authenticationId) {
             console.log(id);
             console.log(pw);
             console.log(phone);
@@ -191,7 +189,7 @@ export default function SignUp({navigation}: NavigationProp):React.JSX.Element {
             }
         </View>
         <TouchableOpacity style= {styles.bottomButtonBox}>
-             <BottomButton name="가입하기" onPress={handleLoginPage} checked={comparePW && checkedAuthentication && name !== '' && authenticationId !== ''} color="#1B1B1B"/>
+             <BottomButton name="가입하기" onPress={handleLoginPage} checked={comparePW && checkedAuthentication && name !== '' && authenticationId} color="#1B1B1B"/>
         </TouchableOpacity>
     </SafeAreaView>)
 }

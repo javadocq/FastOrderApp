@@ -10,6 +10,7 @@ import BottomButton from "../components/BottomButton";
 import TopTitle from "../components/TopTitle";
 import { setItem, getItem } from "../components/Cart";
 import Cancel from "../assets/icon_cancel.svg";
+import { getToken } from "../components/UserToken";
 
 interface Option {
     Cost: number;
@@ -19,6 +20,7 @@ interface Option {
 interface Menu {
     Price: number;
     Title: string;
+    image : string;
 }
 
 interface CartItem {
@@ -63,8 +65,10 @@ export default function Shopping({ navigation }: NavigationProp): React.JSX.Elem
         const getFetchMenu = async () => {
             if (orderMenu.length > 0 && orderMenu[0].store_id) {
                 try {
-                    const response = await axios.get(`${BASE_URL}/stores/id/${orderMenu[0].store_id}`);
+                    const token = await getToken();
+                    const response = await axios.get(`${BASE_URL}/stores/id/${orderMenu[0].store_id}?token=${token}`);
                     setStoreTitle(response.data.store_data.store_name);
+                    console.log(response.data);
                 } catch (error) {
                     console.error("Error fetching menu info:", error);
                 }
@@ -158,7 +162,7 @@ export default function Shopping({ navigation }: NavigationProp): React.JSX.Elem
                                     </View>
                                 </View>
                                 <View style={styles.menuImg}>
-                                    <Image source={menuImg} style={{height : '100%', width: '100%'}}/>
+                                    <Image source={{ uri : item.Menu.image}} style={{height : '100%', width: '100%'}}/>
                                 </View>
                                 <TouchableOpacity style={styles.cancel} onPress={() => deleteCartItems(index)}>
                                     <Cancel />

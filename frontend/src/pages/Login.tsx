@@ -44,7 +44,6 @@ export default function Login({navigation}: LoginProps): React.JSX.Element {
     } catch (error) {
       console.error('Error during login:', error);
     }
-    console.log('finish');
   };
 
   function InputIdHandler(Id: string) {

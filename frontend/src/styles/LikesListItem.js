@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     color: '#484747',
     fontSize: 18,
     fontWeight: '600',
-    lineHeight: 19,
+    lineHeight: 25,
   },
   price: {
     color: '#484747',

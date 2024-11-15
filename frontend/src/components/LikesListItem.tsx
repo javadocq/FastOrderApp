@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, { useEffect } from 'react';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 /** Icons */
 import CloseIcon from '@assets/icon_close.svg';
 
@@ -7,20 +7,25 @@ import CloseIcon from '@assets/icon_close.svg';
 import styles from '../styles/LikesListItem';
 
 interface LikesListItemProp {
-  key: number;
   name: string;
-  price: string;
+  price: number;
   img: string;
   editButtonClicked: boolean;
+  onRemoveMenu: () => void;
 }
 
 export default function LikesListItem({
-  key,
   name,
   price,
   img,
   editButtonClicked,
+  onRemoveMenu,
 }: LikesListItemProp): React.JSX.Element {
+
+  const formatPrice = (price: number) => new Intl.NumberFormat("ko-KR").format(price);
+  useEffect(() => {
+    console.log(img);
+  }, []);
   return (
     <View style={styles.totalContainer}>
       <View style={[styles.divider, {height: 1}]}></View>
@@ -28,18 +33,20 @@ export default function LikesListItem({
         <View style={styles.leftContainer}>
           <View style={styles.menuWrapper}>
             <Text style={styles.menuName}>{name}</Text>
-            <Text style={styles.price}>{price}</Text>
+            <Text style={styles.price}>{`${formatPrice(price)}원`}</Text>
           </View>
         </View>
         <View style={styles.rightContainer}>
-          <View style={styles.menuImg}></View>
-          <View
+          <View style={styles.menuImg}>
+            <Image source={{uri: img}} style={{height:'100%' ,width:'100%'}}/>
+          </View>
+          <TouchableOpacity
             style={[
               styles.closeIconBox,
               {display: editButtonClicked ? 'flex' : 'none'},
-            ]}>
-            <CloseIcon />
-          </View>
+            ]} onPress={onRemoveMenu}>
+              <CloseIcon />
+            </TouchableOpacity>
         </View>
       </View>
     </View>
