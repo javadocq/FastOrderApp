@@ -83,9 +83,11 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
                 onPress: async () => {
 
                   try {
+                    const token = await getToken();
                     const patchCancelled = await axios.patch(`${BASE_URL}/orders/cancel`, {
-                      orderId: orderMenu?.order_id,
+                      order_id: orderMenu?.order_id,
                       source: 'user',
+                      token : token,
                     });
                     setCancel("Cancelled")
                     console.log('Patch response:', patchCancelled.data); // 서버 응답 확인
