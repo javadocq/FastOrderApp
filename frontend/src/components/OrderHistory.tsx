@@ -21,6 +21,7 @@ interface Store {
   store_logo: string;
   menus: Menu[];
   store_id: number;
+  cost_total: number;
 }
 
 interface Menu {
@@ -71,10 +72,13 @@ export default function OrderHistory({
         contentContainerStyle={{paddingBottom: 68}}>
         {historys.map((history, index) => {
           const menuCount = history.menus.length;
+          const menuCost = history.cost_total.toLocaleString();
           const menuName =
             menuCount === 1
-              ? history.menus[0].menu_name
-              : `${history.menus[0].menu_name} 외 ${menuCount - 1}개`;
+              ? `${history.menus[0].menu_name} ${menuCost}원`
+              : `${history.menus[0].menu_name} 외 ${
+                  menuCount - 1
+                }개 ${menuCost}원`;
 
           return (
             <MainListItem
