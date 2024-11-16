@@ -111,12 +111,14 @@ export default function OrderListItem({
         {/* right */}
         <View style={styles.orderContainer}>
           <View style={styles.orderLeftWrapper}>
-            <View style={styles.storeWrapper}>
+            <TouchableOpacity
+              style={styles.storeWrapper}
+              onPress={navigateToStore}>
               <Text style={styles.storeText}>{storeName}</Text>
               <View style={styles.detailIconBox}>
                 <DetailIcon></DetailIcon>
               </View>
-            </View>
+            </TouchableOpacity>
             <Text style={styles.menuText}>{menuName}</Text>
           </View>
           <TouchableOpacity
