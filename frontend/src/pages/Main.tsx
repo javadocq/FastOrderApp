@@ -27,6 +27,7 @@ import BottomSheet from '../components/BottomSheet';
 import NaverMap from '../components/NaverMap';
 import SearchView from '../components/SearchView';
 import SearchResultView from '../components/SearchResultView';
+import { setSearch } from '../components/SearchStorage';
 
 // 아이콘 매핑 정의
 const foodIcons = {
@@ -99,7 +100,6 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
     try {
       const response = await axios.get(`${BASE_URL}/stores`);
       setStores(response.data);
-      // console.log('Total Stores:', response.data);
     } catch (error) {
       console.error('Error during getStores:', error);
     }
@@ -139,6 +139,7 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
             onBlur={() => setIsKeyboardVisible(false)}
             onChangeText={setSearchText} // 텍스트 변경 시 상태 업데이트
             value={searchText} // 텍스트 상태 바인딩
+            onSubmitEditing={() => setSearch(searchText)}
           />
           <CartIcon onPress={navigateToShopping} />
         </View>
@@ -174,9 +175,9 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
       </View>
       {isKeyboardVisible ? (
         searchText.length > 0 ? (
-          <SearchResultView navigation={navigation} searchText={searchText} />
+          <SearchResultView navigation={navigation} searchText={searchText}/>
         ) : (
-          <SearchView />
+          <SearchView  setSearchText={setSearchText}/>
         )
       ) : (
         <>

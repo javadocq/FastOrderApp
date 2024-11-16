@@ -129,15 +129,18 @@ export default function SignUp({navigation}: NavigationProp):React.JSX.Element {
                   try {
                     const response = await axios.get(`${BASE_URL}/check-id?id=${id}`);
                     
-                    if(response.data) {
+                    if(response.data.available) {
                       setAuthenticationId(response.data);
+                      Alert.alert("사용하셔도 되는 아이디 입니다.")
+                    } else {
+                        Alert.alert("중복된 아이디 입니다.")
                     }
-                    Alert.alert("사용하셔도 되는 아이디 입니다.")
                   } catch (error) {
-                    Alert.alert("중복된 아이디 입니다.")
+                    console.log(error);
                   }
                 }
               }; 
+              Duplicate();
     }
 
 

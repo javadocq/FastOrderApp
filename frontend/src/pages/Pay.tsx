@@ -79,21 +79,20 @@ export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
         const token = await getToken();
         const orderPayload = {
             store_id: orderMenu[0]?.store_id,
-            token: token,
-            order_type: storeChecked ? "매장식사" : "픽업",
-            people_count: selectedCount,
+            token: token, //여기서 처리
+            order_type: storeChecked ? "매장식사" : "픽업", //여기서 처리
+            people_count: selectedCount, //여기서 처리
             order_items: JSON.stringify(orderMenu),
-            order_notes: requestText,
+            order_notes: requestText, //여기서 처리;
             cost_total: totalPrice,
-            cost_coupon: 0,
+            cost_coupon: 0, //여기서 처리
         };
-    
+
         try {
             const response = await axios.post(`${BASE_URL}/orders/new-order`, orderPayload);
             const newOrderId = response.data.order_id; // 새로운 orderId 저장
             setOrderId(newOrderId); // 상태 업데이트
             await setItem('cartItems', JSON.stringify([])); // 빈 배열로 초기화
-            await setReception('orderPayload', JSON.stringify(orderPayload));
             // navigation.navigate에서 newOrderId 사용
             navigation.navigate('Reception', { orderId: newOrderId });
         } catch (error) {

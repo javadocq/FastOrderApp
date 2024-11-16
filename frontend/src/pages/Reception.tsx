@@ -71,6 +71,7 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
     };
 
 
+
     function handleCancel() {
         Alert.alert(
             '주문취소',
@@ -79,8 +80,20 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
               {text: '아니오', onPress: () => {}, style: 'cancel'},
               {
                 text: '예',
-                onPress: () => {
-                  setCancel("Cancelled")
+                onPress: async () => {
+
+                  try {
+                    const token = await getToken();
+                    const patchCancelled = await axios.patch(`${BASE_URL}/orders/cancel`, {
+                      order_id: orderMenu?.order_id,
+                      source: 'user',
+                      token : token,
+                    });
+                    setCancel("Cancelled")
+                    console.log('Patch response:', patchCancelled.data); // 서버 응답 확인
+                  } catch (error) {
+                    console.error('Error during patch:', error); // 에러 확인
+                  }
                 },
                 style: 'destructive',
               },
@@ -116,17 +129,6 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
     }, [cancel])
 
 
-    
-
-    // useEffect(() => {
-    //     fetchCurrentStep(); // 컴포넌트 마운트 시 한 번 호출
-
-    //     const interval = setInterval(() => {
-    //         fetchCurrentStep(); // 주기적으로 호출
-    //     }, 5000); // 5초마다 호출
-
-    //     return () => clearInterval(interval); // 클린업
-    // }, []);
 
     return (
         <SafeAreaView style={styles.container}>

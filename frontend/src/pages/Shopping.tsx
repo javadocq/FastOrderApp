@@ -34,7 +34,6 @@ interface CartItem {
 
 
 export default function Shopping({ navigation }: NavigationProp): React.JSX.Element {
-    const menuImg = require('../assets/menu_title.png');
     const [orderMenu, setOrderMenu] = useState<CartItem[]>([]);
     const [storeTitle, setStoreTitle] = useState<string>('');
 
