@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '500',
+    textAlign: 'left',
   },
   orderButton: {
     marginTop: 9,
