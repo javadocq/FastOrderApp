@@ -82,10 +82,7 @@ export default function OrderHistory({
             horizontal
             contentContainerStyle={styles.imgScrollView}
             showsHorizontalScrollIndicator={false}>
-            <Image
-              source={{uri: `${BASE_URL}/media/${store.logo}`}}
-              style={styles.menuImg}
-            />
+            <Image source={{uri: `${store.logo}`}} style={styles.menuImg} />
           </ScrollView>
         </View>
       ) : (
