@@ -87,7 +87,7 @@ export default function My({navigation}: NavigationProp): React.JSX.Element {
           </TouchableOpacity>
         </View>
         <View style={styles.couponTitleContainer}>
-          <Text style={styles.titleText}>돌돌님의 쿠폰</Text>
+          <Text style={styles.titleText}>{userName}님의 쿠폰</Text>
           <TouchableOpacity style={styles.couponDetailWrapper}>
             <Text>더보기</Text>
             <View style={styles.couponDetailIconBox}>

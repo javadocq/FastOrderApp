@@ -12,6 +12,7 @@ import Shopping from './src/pages/Shopping';
 import Pay from './src/pages/Pay';
 import Reception from './src/pages/Reception';
 import SearchResultView from './src/components/SearchResultView';
+import MainListItem from './src/components/MainListItem';
 
 /** Components */
 import BottomNavigation from './src/components/BottomNavigation';
@@ -77,6 +78,11 @@ export default function App(): React.JSX.Element {
           <Stack.Screen
             name="SearchResultView"
             component={SearchResultView}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="MainListItem"
+            component={MainListItem}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import axios from 'axios';
 
 /** Consts */
 import {BASE_URL} from '../consts/Url';
+/** Components */
+import {getToken} from '../components/UserToken';
 
 import styles from '../styles/StoreInfo';
 import {NavigationProp} from '../navigation/NavigationProps';
@@ -17,6 +19,7 @@ interface Store {
   store_type: string;
   store_status: string;
   seating_available: boolean;
+  logo: string;
 }
 
 interface CombinedProp extends NavigationProp {
@@ -35,7 +38,9 @@ export default function OrderHistory({
 
   const getStoresByType = async (storeId: number) => {
     try {
+      const token = await getToken();
       const response = await axios.get(`${BASE_URL}/stores/mini/id/${storeId}`);
+
       setStore(response.data.store_data);
       console.log(response.data.store_data);
     } catch (error) {
@@ -77,10 +82,10 @@ export default function OrderHistory({
             horizontal
             contentContainerStyle={styles.imgScrollView}
             showsHorizontalScrollIndicator={false}>
-            <View style={styles.menuImg}></View>
-            <View style={styles.menuImg}></View>
-            <View style={styles.menuImg}></View>
-            <View style={styles.menuImg}></View>
+            <Image
+              source={{uri: `${BASE_URL}/media/${store.logo}`}}
+              style={styles.menuImg}
+            />
           </ScrollView>
         </View>
       ) : (
