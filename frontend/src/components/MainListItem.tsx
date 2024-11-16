@@ -68,7 +68,7 @@ export default function MainListItem({
 
   const cancelLike = () => {
     setModalVisible(false);
-    setLikeChecked(is_wished); // 초기 상태로 복원
+    setLikeChecked(is_wished);
   };
 
   const postLikes = async () => {
