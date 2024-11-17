@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {Alert} from 'react-native';
 import 'react-native-gesture-handler';
-import messaging from '@react-native-firebase/messaging';
 
 import Login from './src/pages/Login';
 import MyDetail from './src/pages/MyDetail';
