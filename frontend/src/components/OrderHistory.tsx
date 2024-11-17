@@ -22,6 +22,7 @@ interface Store {
   menus: Menu[];
   store_id: number;
   cost_total: number;
+  order_id: number;
 }
 
 interface Menu {
@@ -91,6 +92,7 @@ export default function OrderHistory({
               store_logo={history.store_logo}
               is_wished={history.is_wished}
               storeId={history.store_id}
+              orderId={history.order_id}
               updateWishStatus={updateWishStatus} // 상태 업데이트 함수 전달
             />
           );

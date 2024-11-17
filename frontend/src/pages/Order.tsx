@@ -28,6 +28,7 @@ interface Store {
   menus: Menu[];
   store_id: number;
   cost_total: number;
+  order_id: number;
 }
 
 interface Menu {
@@ -41,6 +42,8 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
   const [loading, setLoading] = useState(false); // 로딩 상태 추가
 
   useEffect(() => {
+    console.log('Orders Page');
+
     getSearchResult();
   }, []);
 
@@ -122,6 +125,8 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
               store_logo={history.store_logo}
               is_wished={history.is_wished}
               storeId={history.store_id}
+              costTotal={history.cost_total}
+              orderId={history.order_id}
             />
           );
         })}
