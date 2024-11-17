@@ -1,5 +1,5 @@
 import { setToken, getToken } from '../components/UserToken';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import UnCheckedBox from '../assets/icon_unchecked_box.svg';
 import { BASE_URL } from '../consts/Url';
@@ -7,6 +7,7 @@ import CheckedBox from '../assets/icon_checked_box.svg';
 import TradeMark from '../assets/icon_trademark.svg';
 import styles from '../styles/Login';
 import axios from 'axios';
+import messaging from '@react-native-firebase/messaging'
 
 interface LoginProps {
   navigation: {
@@ -20,6 +21,23 @@ export default function Login({navigation}: LoginProps): React.JSX.Element {
   const [password, setPassword] = useState<string>('');
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false); //로그인 상태 유지
+  const [FcmToken, setFcmToken] = useState<string>("");
+
+  // FCM 토큰 가져오기
+  useEffect(() => {
+    const fetchFcmToken = async () => {
+      try {
+        const token = await messaging().getToken();
+        console.log('FCM Tokendd:', token);
+        setFcmToken(token);
+      } catch (error) {
+        console.error('Error fetching FCM token:', error);
+      }
+    };
+
+    fetchFcmToken();
+  }, []);
+
 
   const getFetchLogin = async () => {
     try {
@@ -28,6 +46,7 @@ export default function Login({navigation}: LoginProps): React.JSX.Element {
         {
           text_id: id,
           pw: password,
+          device_token : FcmToken,
         },
         {
           headers: {

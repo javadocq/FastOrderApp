@@ -1,10 +1,14 @@
-import React, {useEffect} from 'react';
-import {Alert, Platform} from 'react-native';
+import React, { useEffect } from 'react';
+import { Alert, Platform } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-import FlashMessage, {showMessage} from 'react-native-flash-message';
+import { NavigationProp, RouteProp } from '../navigation/NavigationProps';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
+import { useNavigation } from '@react-navigation/native';  // react-navigation hook
 
 const FCMHandler: React.FC = () => {
+  const navigation = useNavigation<NavigationProp['navigation']>();  // 네비게이션 객체 가져오기
+
   useEffect(() => {
     // PushNotification 설정
     PushNotification.configure({
@@ -29,7 +33,7 @@ const FCMHandler: React.FC = () => {
     // 백그라운드 메시지 핸들러
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('Message handled in the background!', remoteMessage);
-      // 백그라운드에서 수신된 메시지 처리
+
       const title = remoteMessage.notification?.title || 'Default Title';
       const body = remoteMessage.notification?.body || 'Default Body';
 
@@ -39,9 +43,19 @@ const FCMHandler: React.FC = () => {
         title: title,
         message: body,
       });
-
-      // FlashMessage는 포그라운드에서만 표시 가능하므로, Alert로 대체
-      Alert.alert(title, body);
+      console.log(remoteMessage);
+      // 백그라운드에서는 Alert로만 표시 (FlashMessage는 포그라운드에서만 사용 가능)
+      Alert.alert(title, body, [
+        {
+          text: 'OK',
+          onPress: () => {
+            // 알림 클릭 시 Reception 페이지로 이동
+            if (remoteMessage.data && remoteMessage.data.order_no) {
+              navigation.navigate('Reception', { orderId: Number(remoteMessage.data.order_no) });
+            }
+          }
+        }
+      ]);
     });
 
     // 포그라운드에서 메시지 수신
@@ -55,17 +69,20 @@ const FCMHandler: React.FC = () => {
         title: title,
         message: body,
       });
-
+      console.log(remoteMessage);
       // FlashMessage로 알림 표시
       showMessage({
         message: title,
         description: body,
         type: 'info',
         duration: 4000,
+        onPress: () => {
+          // FlashMessage 클릭 시 Reception 페이지로 이동
+          if (remoteMessage.data && remoteMessage.data.order_no) {
+            navigation.navigate('Reception', { orderId: Number(remoteMessage.data.order_no) });
+          }
+        }
       });
-
-      // 필요시 Alert도 유지
-      Alert.alert(title, body);
     });
 
     // FCM 토큰 가져오기
@@ -78,7 +95,7 @@ const FCMHandler: React.FC = () => {
 
     // 컴포넌트 언마운트 시 구독 해제
     return () => unsubscribe();
-  }, []);
+  }, [navigation]);
 
   return <FlashMessage position="top" />;
 };

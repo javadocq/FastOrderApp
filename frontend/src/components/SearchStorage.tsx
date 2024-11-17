@@ -8,10 +8,12 @@ export const setSearch = async (newSearch: string) => {
         const searches = existingSearches ? JSON.parse(existingSearches) : [];
 
         // 검색어가 3개 이상이면 가장 오래된 검색어(맨 뒤) 제거
-        if (searches.length >= 3) {
+        if (searches.length > 3) {
             searches.shift();
         }
-        searches.push(newSearch); // 배열에 새 검색어 추가
+        if(newSearch !== "") {
+            searches.push(newSearch); // 배열에 새 검색어 추가
+        }
 
         console.log("Searches Array:", searches); // 배열 상태 확인
         // 배열을 JSON으로 직렬화하여 저장
