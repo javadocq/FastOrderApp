@@ -7,10 +7,23 @@ import PushNotification from 'react-native-push-notification';
 
 const FCMHandler: React.FC = () => {
   useEffect(() => {
+    // FCM 권한 요청 (iOS에서만)
+    const requestPermission = async () => {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+      }
+    };
+
+    requestPermission();
+
     // PushNotification 설정 (Android에서만 사용)
     PushNotification.configure({
       onNotification: function (notification: any) {
-        // 타입을 any로 설정
         console.log('NOTIFICATION:', notification);
       },
       requestPermissions: Platform.OS === 'ios',
@@ -21,7 +34,6 @@ const FCMHandler: React.FC = () => {
       PushNotificationIOS.addEventListener(
         'notification',
         (notification: any) => {
-          // 타입을 any로 설정
           console.log('Received notification in iOS:', notification);
           Alert.alert(notification.getTitle(), notification.getBody());
         },
@@ -85,8 +97,8 @@ const FCMHandler: React.FC = () => {
       Alert.alert(title, body);
     });
 
-    // FCM 토큰 가져오기
     const getToken = async () => {
+      console.log('Attempting to get FCM token...');
       const token = await messaging().getToken();
       console.log('FCM Token:', token);
     };
