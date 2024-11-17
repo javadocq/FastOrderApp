@@ -23,7 +23,6 @@ import BottomButton from "../components/BottomButton";
 import TopTitle from "../components/TopTitle";
 import { setItem, getItem } from "../components/Cart";
 import { getToken } from "../components/UserToken";
-import { setReception } from "../components/PayPost";
 
 
 interface Option {
@@ -51,7 +50,7 @@ export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
     const [requestText, setRequestText] = useState<string>('');
     const [checked, setChecked] = useState<boolean>(false); //다음에도 사용
     const [couponCount ,setCouponCount] = useState<number>(0);
-    const [count, setCount] = useState<number>(0); //식사 인원 카운트 수
+    const [count, setCount] = useState<number>(1); //식사 인원 카운트 수
     const [selectedCount, setSelectedCount] = useState<number>(0); //확정된 식사 인원 카운트 수 
     const [storeChecked, setStoreChecked] = useState<boolean>(false); //매장 식사 체크
     const [pickupChecked, setPickupChecked] = useState<boolean>(false); //픽업 체크
@@ -59,7 +58,7 @@ export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
     const [userPoint, setUserPoint] = useState<number>(0);
     const [orderId, setOrderId] = useState<number>(0);
     
-
+ 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {

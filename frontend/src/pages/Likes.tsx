@@ -122,8 +122,6 @@ export default function Likes({navigation}: NavigationProp): React.JSX.Element {
       </View>
       <ScrollView style={styles.contentContainer}>
         {likesMenu.map((item, storeIndex) => {
-          // 메뉴가 하나라도 있으면 가게 렌더링
-          if (item.menus.length > 0) {
             return (
               <View key={storeIndex}>
                 <LikesStoreHeader
@@ -144,8 +142,7 @@ export default function Likes({navigation}: NavigationProp): React.JSX.Element {
               </View>
             );
           }
-          return null; // 메뉴가 없으면 해당 가게는 렌더링하지 않음
-        })}
+        )}
       </ScrollView>
     </View>
   );
