@@ -14,6 +14,8 @@ import TopTitle from "../components/TopTitle";
 import ProgressBar from "../components/Progress";
 import BottomButton from "../components/BottomButton";
 import axios from "axios";
+import PushNotification from "react-native-push-notification";
+import messaging from '@react-native-firebase/messaging';
 import { getToken } from "../components/UserToken";
 import { Alert } from "react-native";
 
@@ -70,8 +72,6 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
         return new Intl.NumberFormat("ko-KR").format(price);
     };
 
-
-
     function handleCancel() {
         Alert.alert(
             '주문취소',
@@ -105,28 +105,49 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
           );
     };
 
-    useEffect(() => {
-        const fetchCurrentStep = async () => {
-            try {
-                const token = await getToken();
-                const response = await axios.get(`${BASE_URL}/user/oneOrderHistory?token=${token}&order_id=${orderId}`); // orderId 사용
-                console.log(JSON.stringify(response.data));
-                const { order_status } = response.data;
-                setCancel(order_status);
-                
-                if (cancel === "Cancelled" || cancel === "Rejected") {
-                    navigation.navigate('BottomNavigation');  // BottomNavigation으로 이동
-                } else {
-                    setCurrentStep(order_status);
-                    setOrderMenu(response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching current step:', error);
-            }
+    const fetchCurrentStep = async () => {
+        try {
+            const token = await getToken();
+            const response = await axios.get(`${BASE_URL}/user/oneOrderHistory?token=${token}&order_id=${orderId}`); // orderId 사용
+            console.log(JSON.stringify(response.data));
+            const { order_status } = response.data;
+            setCancel(order_status);
             
-        };
+            if (cancel === "Cancelled" || cancel === "Rejected") {
+                navigation.navigate('BottomNavigation');  // BottomNavigation으로 이동
+            } else {
+                setCurrentStep(order_status);
+                setOrderMenu(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching current step:', error);
+        }
+    };
+
+    useEffect(() => {
+        // FCM 메시지 수신 처리
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            const title = remoteMessage.notification?.title || '주문 상태 업데이트';
+            const body = remoteMessage.notification?.body || '주문 상태가 변경되었습니다.';
+
+            // 상태바에 알림 표시
+            PushNotification.localNotification({
+                channelId: 'default_channel',
+                title,
+                message: body,
+            });
+
+            // 주문 상태를 다시 불러오기
+            fetchCurrentStep();
+        });
+
+        return () => unsubscribe(); // 언마운트 시 구독 해제
+    }, []);
+ 
+    useEffect(() => {
         fetchCurrentStep();
     }, [cancel])
+
 
 
 
@@ -150,7 +171,7 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
                             <View style={{width : '85%'}}>
                                 <Text style={styles.lableText}>{`${orderMenu?.user_name}님의 주문이 준비중이예요`}</Text>
                                 <View style={styles.inputBox}>
-                                <Text style={styles.inputText}>{`${orderMenu?.ready_time_at.toString().slice(11,16)} 완료 예정`}</Text>
+                                <Text style={styles.inputText}>{`${orderMenu?.ready_time_at.toString().slice(11,13)}시:${orderMenu?.ready_time_at.toString().slice(14,16)}분 완료 예정`}</Text>
                                 </View>
                             </View>
                         ) : (
