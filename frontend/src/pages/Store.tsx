@@ -7,6 +7,7 @@ import {
   SafeAreaView, 
   TouchableOpacity,
   Image,
+  Linking
 } from 'react-native';
 import { NavigationProp, RouteProp } from '../navigation/NavigationProps'; 
 import { BASE_URL } from '../consts/Url';
@@ -105,6 +106,14 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
     postFetchStoreLike();
   }
 
+  // 전화 걸기 핸들러
+  const handlePhoneCall = () => {
+    if (store?.phone_number) {
+      const phoneUrl = `tel:${store.phone_number}`;  // 'tel:' URI 사용
+      Linking.openURL(phoneUrl).catch(err => console.error("Error launching phone call:", err));
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -147,7 +156,9 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
               <View style={styles.phoneImg}>
               <Phone />
               </View>
-              <Text style={styles.storePhoneNumber}>{store?.phone_number}</Text>
+              <TouchableOpacity style={styles.storePhoneNumber} onPress={handlePhoneCall}>
+                <Text style={styles.storePhoneNumber}>{store?.phone_number}</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
