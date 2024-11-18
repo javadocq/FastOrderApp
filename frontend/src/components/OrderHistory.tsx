@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
-
+import {useFocusEffect} from '@react-navigation/native';
 import {NavigationProp} from '../navigation/NavigationProps';
 /** Consts */
 import {BASE_URL} from '../consts/Url';
@@ -35,22 +35,24 @@ export default function OrderHistory({
   const [historys, setHistorys] = useState<Store[]>([]);
   const [userName, setUserName] = useState<string>();
 
-  useEffect(() => {
-    const getSearchResult = async () => {
-      try {
-        const token = await getToken();
-        const response = await axios.get(
-          `${BASE_URL}/orders/history?token=${token}`,
-        );
+  useFocusEffect(
+    React.useCallback(() => {
+      const getSOrderHistory = async () => {
+        try {
+          const token = await getToken();
+          const response = await axios.get(
+            `${BASE_URL}/orders/history?token=${token}`,
+          );
 
-        setHistorys(response.data.order_history);
-        setUserName(response.data.user_name);
-      } catch (e) {
-        console.log('Search Result Error: ', e);
-      }
-    };
-    getSearchResult();
-  }, []);
+          setHistorys(response.data.order_history);
+          setUserName(response.data.user_name);
+        } catch (e) {
+          console.log('Search Result Error: ', e);
+        }
+      };
+      getSOrderHistory();
+    }, []),
+  );
 
   const updateWishStatus = (storeId: number, newStatus: boolean) => {
     setHistorys(prevHistory =>

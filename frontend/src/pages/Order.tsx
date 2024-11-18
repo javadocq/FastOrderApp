@@ -6,6 +6,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {NavigationProp} from '../navigation/NavigationProps';
 import axios from 'axios';
 
@@ -41,13 +42,18 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
   const [startIndex, setStartIndex] = useState(0); // 현재 인덱스 상태 추가
   const [loading, setLoading] = useState(false); // 로딩 상태 추가
 
-  useEffect(() => {
-    console.log('Orders Page');
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('Orders Page');
+      getOrderHistory();
 
-    getSearchResult();
-  }, []);
+      return () => {
+        // 필요한 클린업 작업
+      };
+    }, []),
+  );
 
-  const getSearchResult = async () => {
+  const getOrderHistory = async () => {
     if (loading) return;
     setLoading(true);
     try {
@@ -55,8 +61,10 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
       const response = await axios.get(
         `${BASE_URL}/orders/history?token=${token}&start_index=${startIndex}&count=6`,
       );
+      console.log('Response Data: ', response.data);
+
       setHistorys(prev => [...prev, ...response.data.order_history]);
-      setStartIndex(prev => prev + 10);
+      setStartIndex(prev => prev + 6);
     } catch (e) {
       console.log('Search Result Error: ', e);
     } finally {
@@ -69,7 +77,7 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
     const isAtBottom =
       contentOffset.y >= contentSize.height - layoutMeasurement.height - 20; // 약간의 여유를 두기 위한 20
     if (isAtBottom) {
-      getSearchResult(); // 바닥에 도달했을 때 추가 데이터 요청
+      getOrderHistory(); // 바닥에 도달했을 때 추가 데이터 요청
     }
   };
 
