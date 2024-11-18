@@ -58,7 +58,7 @@ export default function OrderListItem({
   }, [is_wished]);
 
   const navigateToPay = () => {
-    navigation.navigate('Pay', {orderId});
+    navigation.navigate('Shopping', {orderId});
   };
 
   const navigateToStore = () => {
