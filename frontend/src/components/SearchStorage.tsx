@@ -8,7 +8,7 @@ export const setSearch = async (newSearch: string) => {
         const searches = existingSearches ? JSON.parse(existingSearches) : [];
 
         // 검색어가 3개 이상이면 가장 오래된 검색어(맨 뒤) 제거
-        if (searches.length > 3) {
+        if (searches.length >= 3) {
             searches.shift();
         }
         if(newSearch !== "") {

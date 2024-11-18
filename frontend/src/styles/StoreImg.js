@@ -3,24 +3,24 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   storeImgContainer: {
     width: '100%',
-    height: 165,
+    height: 250,
     backgroundColor: '#FFF',
     position: 'relative',
   },
   backArrowImg: {
-    height: '15%',
-    width: '15%',
+    height: '12%',
+    width: '12%',
     position: 'absolute',
     top: 10,
-    zIndex: 2,
+    zIndex: 3,
   },
   cartImg: {
-    height: '15%',
-    width: '15%',
+    height: '12%',
+    width: '12%',
     position: 'absolute',
     right: 10,
     top: 10,
-    zIndex: 2,
+    zIndex: 3,
   },
   imgContainer: {
     position: 'relative',
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   img: {
     zIndex: 1,
-    height: 165,
+    height: '100%',
     width: '100%',
   },
   gradient: {

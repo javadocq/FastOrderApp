@@ -17,6 +17,7 @@ interface Store {
   order_date: string;
   order_status: string;
   is_wished: boolean;
+  order_id: number;
   store_name: string;
   store_logo: string;
   menus: Menu[];
@@ -37,7 +38,7 @@ export default function OrderHistory({
 
   useFocusEffect(
     React.useCallback(() => {
-      const getSOrderHistory = async () => {
+      const getOrderHistory = async () => {
         try {
           const token = await getToken();
           const response = await axios.get(
@@ -50,7 +51,7 @@ export default function OrderHistory({
           console.log('Search Result Error: ', e);
         }
       };
-      getSOrderHistory();
+      getOrderHistory();
     }, []),
   );
 

@@ -1,5 +1,4 @@
 import {View, TouchableOpacity, Image, ImageSourcePropType} from 'react-native';
-import Cart from '../assets/icon_cart_white.svg';
 import BackArrow from '../assets/icon_back_arrow.svg';
 import ShoppingCartIcon from '../components/ShoppingCartIcon';
 import LinearGradient from 'react-native-linear-gradient'; // 그라데이션 임포트

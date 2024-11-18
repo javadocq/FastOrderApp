@@ -59,7 +59,7 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
   useEffect(() => {
         const getFetchStoreMenu = async () => {
             try {
-              const token = await getToken();
+              const token = await getToken(); 
               const response = await axios.get(`${BASE_URL}/stores/id/${storeId}?token=${token}`);
               const formattedMenu = await response.data.menu_data;
               setLikeChecked(response.data.is_wished);
@@ -155,13 +155,13 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
 
           <View style={styles.menuWrap}>
             {menu.map((item, index) => (
-              <TouchableOpacity key={index} style={styles.menu} onPress={() => handleMenuInfo(item.no)}>
+              <TouchableOpacity key={index} style={styles.menu} onPress={() => handleMenuInfo(item?.no)}>
                 <View style={styles.menuBox}>
-                  <Text style={styles.menuName}>{item.name}</Text>
-                  <Text style={styles.menuPrice}>{`${formatPrice(item.price)}원`}</Text>
+                  <Text style={styles.menuName}>{item?.name}</Text>
+                  <Text style={styles.menuPrice}>{`${formatPrice(item?.price)}원`}</Text>
                 </View>
                 <View style={styles.menuImg}>
-                  <Image source={{uri : item.image}} style={{height : '100%', width : '100%'}}/>
+                  <Image source={{uri : item?.image}} style={{height : '100%', width : '100%'}}/>
                 </View>
               </TouchableOpacity>
             ))}
