@@ -2,7 +2,7 @@ import {View, TouchableOpacity, Image, ImageSourcePropType} from 'react-native';
 import Cart from '../assets/icon_cart_white.svg';
 import BackArrow from '../assets/icon_back_arrow.svg';
 import ShoppingCartIcon from '../components/ShoppingCartIcon';
-// import LinearGradient from 'react-native-linear-gradient'; // 그라데이션 임포트
+import LinearGradient from 'react-native-linear-gradient'; // 그라데이션 임포트
 import styles from '../styles/StoreImg';
 
 interface StoreImgProps {
@@ -24,7 +24,7 @@ export default function StoreImg({
       <TouchableOpacity onPress={onShopping} style={styles.cartImg}>
         <ShoppingCartIcon color="White" />
       </TouchableOpacity>
-      {/* {img !== undefined ? (
+      {img !== undefined ? (
         <View style={styles.imgContainer}>
           <Image source={{uri: img}} style={styles.img} />
           <LinearGradient
@@ -34,7 +34,7 @@ export default function StoreImg({
         </View>
       ) : (
         <View></View>
-      )} */}
+      )}
     </View>
   );
 }

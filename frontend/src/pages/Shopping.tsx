@@ -73,7 +73,6 @@ export default function Shopping({ navigation }: NavigationProp): React.JSX.Elem
                 }
             }
         };
-    
         getFetchMenu();
     }, [orderMenu]); 
     

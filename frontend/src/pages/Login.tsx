@@ -1,6 +1,6 @@
 import { setToken, getToken } from '../components/UserToken';
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Alert, Platform} from 'react-native';
 import UnCheckedBox from '../assets/icon_unchecked_box.svg';
 import { BASE_URL } from '../consts/Url';
 import CheckedBox from '../assets/icon_checked_box.svg';
@@ -23,18 +23,21 @@ export default function Login({navigation}: LoginProps): React.JSX.Element {
   const [checked, setChecked] = useState<boolean>(false); //로그인 상태 유지
   const [FcmToken, setFcmToken] = useState<string>("");
 
-  // FCM 토큰 가져오기
   useEffect(() => {
     const fetchFcmToken = async () => {
       try {
+        if (Platform.OS === 'ios') {
+          console.log('Registering device for remote messages...');
+          await messaging().registerDeviceForRemoteMessages();
+        }
         const token = await messaging().getToken();
-        console.log('FCM Tokendd:', token);
+        console.log('FCM Token:', token);
         setFcmToken(token);
       } catch (error) {
         console.error('Error fetching FCM token:', error);
       }
     };
-
+  
     fetchFcmToken();
   }, []);
 
