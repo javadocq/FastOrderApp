@@ -17,6 +17,7 @@ interface Store {
   order_date: string;
   order_status: string;
   is_wished: boolean;
+  order_id : number;
   store_name: string;
   store_logo: string;
   menus: Menu[];
@@ -38,6 +39,7 @@ export default function OrderHistory({
     const getSearchResult = async () => {
       try {
         const token = await getToken();
+        console.log(token);
         const response = await axios.get(
           `${BASE_URL}/orders/history?token=${token}`,
         );
@@ -91,6 +93,7 @@ export default function OrderHistory({
               store_logo={history.store_logo}
               is_wished={history.is_wished}
               storeId={history.store_id}
+              orderId ={history.order_id}
               updateWishStatus={updateWishStatus} // 상태 업데이트 함수 전달
             />
           );

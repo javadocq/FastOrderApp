@@ -18,6 +18,7 @@ interface MainListProp {
   store_logo: string;
   is_wished: boolean;
   storeId: number;
+  orderId : number;
   updateWishStatus: (storeId: number, newStatus: boolean) => void; // 상태 업데이트 함수 타입 정의
 }
 
@@ -32,6 +33,7 @@ export default function MainListItem({
   store_logo,
   is_wished,
   storeId,
+  orderId,
   updateWishStatus,
 }: CombinedInterface): React.JSX.Element {
   const [likeChecked, setLikeChecked] = useState<boolean>(is_wished);
@@ -41,8 +43,8 @@ export default function MainListItem({
     setLikeChecked(is_wished);
   }, [is_wished]);
 
-  const navigateToPay = () => {
-    navigation.navigate('Pay');
+  const navigateToShopping = () => {
+    navigation.navigate('Shopping', { orderId });
   };
 
   const navigateToStore = () => {
@@ -112,7 +114,7 @@ export default function MainListItem({
           <Text style={styles.menuText}>{menuName}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.orderButton} onPress={navigateToPay}>
+      <TouchableOpacity style={styles.orderButton} onPress={navigateToShopping}>
         <Text style={styles.orderText}>같은 메뉴 주문하기</Text>
       </TouchableOpacity>
       <View style={styles.divider}></View>
