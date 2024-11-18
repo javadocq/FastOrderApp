@@ -116,7 +116,7 @@ const FCMHandler: React.FC = () => {
         }
       });
 
-      Alert.alert(title, body);
+      // Alert.alert(title, body);
     });
 
     const getToken = async () => {
