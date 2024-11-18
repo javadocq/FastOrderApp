@@ -23,7 +23,6 @@ interface Store {
   menus: Menu[];
   store_id: number;
   cost_total: number;
-  order_id: number;
 }
 
 interface Menu {
