@@ -8,17 +8,11 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# use_modular_headers! 추가
-use_modular_headers!
-
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
-
 target 'frontend' do
   config = use_native_modules!
+
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -26,8 +20,8 @@ target 'frontend' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # GoogleUtilities에 대해 modular_headers 설정
-  pod 'GoogleUtilities', :modular_headers => true
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
 
   target 'frontendTests' do
     inherit! :complete
