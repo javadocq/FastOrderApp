@@ -45,12 +45,15 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
   useFocusEffect(
     React.useCallback(() => {
       console.log('Orders Page');
-      getOrderHistory();
+      // 상태 초기화
+      setHistorys([]); // 기존 데이터를 초기화
+      setStartIndex(0); // 인덱스 초기화
+      getOrderHistory(); // 데이터 가져오기
 
       return () => {
-        // 필요한 클린업 작업
+        // 클린업 작업은 필요 없음
       };
-    }, []),
+    }, []), // 의존성 배열은 비워두기
   );
 
   const getOrderHistory = async () => {
@@ -63,6 +66,7 @@ export default function Order({navigation}: NavigationProp): React.JSX.Element {
       );
       console.log('Response Data: ', response.data);
 
+      // 상태 업데이트
       setHistorys(prev => [...prev, ...response.data.order_history]);
       setStartIndex(prev => prev + 6);
     } catch (e) {

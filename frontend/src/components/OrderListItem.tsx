@@ -70,15 +70,16 @@ export default function OrderListItem({
     if (likeChecked) {
       setModalVisible(true);
     } else {
-      setLikeChecked(true); // 상태를 true로 변경
-      updateWishStatus(storeId, true); // 상태 업데이트 호출
-      postLikes(); // 서버에 좋아요 추가 요청
+      setLikeChecked(true);
+      updateWishStatus(storeId, true);
+      postLikes();
     }
   };
 
   const confirmLike = () => {
-    setLikeChecked(false); // 상태를 false로 변경
-    updateWishStatus(storeId, false); // 상태 업데이트 호출
+    setLikeChecked(false);
+    updateWishStatus(storeId, false);
+    postLikes();
     setModalVisible(false);
   };
 
@@ -89,11 +90,12 @@ export default function OrderListItem({
 
   const postLikes = async () => {
     try {
+      console.log('try to post like');
       const token = await getToken();
       const response = await axios.post(`${BASE_URL}/user/wish`, {
         token: token,
         type: 'store',
-        store_id: storeId,
+        store_id: storeId.toString(),
       });
       console.log(response.data);
     } catch (error) {

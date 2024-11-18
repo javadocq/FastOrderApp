@@ -66,6 +66,7 @@ export default function MainListItem({
   const confirmLike = () => {
     setLikeChecked(false);
     updateWishStatus(storeId, false);
+    postLikes();
     setModalVisible(false);
   };
 
@@ -76,11 +77,12 @@ export default function MainListItem({
 
   const postLikes = async () => {
     try {
+      console.log('try to post like');
       const token = await getToken();
       const response = await axios.post(`${BASE_URL}/user/wish`, {
         token: token,
         type: 'store',
-        store_id: storeId,
+        store_id: storeId.toString(),
       });
       console.log(response.data);
     } catch (error) {

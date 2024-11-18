@@ -37,22 +37,24 @@ export default function OrderHistory({
 
   useFocusEffect(
     React.useCallback(() => {
-      const getOrderHistory = async () => {
-        try {
-          const token = await getToken();
-          const response = await axios.get(
-            `${BASE_URL}/orders/history?token=${token}`,
-          );
-
-          setHistorys(response.data.order_history);
-          setUserName(response.data.user_name);
-        } catch (e) {
-          console.log('Search Result Error: ', e);
-        }
-      };
+      setHistorys([]);
       getOrderHistory();
     }, []),
   );
+
+  const getOrderHistory = async () => {
+    try {
+      const token = await getToken();
+      const response = await axios.get(
+        `${BASE_URL}/orders/history?token=${token}`,
+      );
+
+      setHistorys(response.data.order_history);
+      setUserName(response.data.user_name);
+    } catch (e) {
+      console.log('Search Result Error: ', e);
+    }
+  };
 
   const updateWishStatus = (storeId: number, newStatus: boolean) => {
     setHistorys(prevHistory =>
