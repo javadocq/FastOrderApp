@@ -103,6 +103,7 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
                 console.error("Error fetching menu info:", error);
             }
         };
+        
         getFetchMenuInfo();
     }, [menuId]);
 
