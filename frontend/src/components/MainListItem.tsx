@@ -18,7 +18,8 @@ interface MainListProp {
   store_logo: string;
   is_wished: boolean;
   storeId: number;
-  orderId : number;
+  orderId: number;
+
   updateWishStatus: (storeId: number, newStatus: boolean) => void; // 상태 업데이트 함수 타입 정의
 }
 
@@ -44,7 +45,7 @@ export default function MainListItem({
   }, [is_wished]);
 
   const navigateToShopping = () => {
-    navigation.navigate('Shopping', { orderId });
+    navigation.navigate('Shopping', {orderId});
   };
 
   const navigateToStore = () => {
@@ -65,6 +66,7 @@ export default function MainListItem({
   const confirmLike = () => {
     setLikeChecked(false);
     updateWishStatus(storeId, false);
+    postLikes();
     setModalVisible(false);
   };
 
@@ -75,11 +77,12 @@ export default function MainListItem({
 
   const postLikes = async () => {
     try {
+      console.log('try to post like');
       const token = await getToken();
       const response = await axios.post(`${BASE_URL}/user/wish`, {
         token: token,
         type: 'store',
-        store_id: storeId,
+        store_id: storeId.toString(),
       });
       console.log(response.data);
     } catch (error) {

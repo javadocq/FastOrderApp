@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
-
+import {useFocusEffect} from '@react-navigation/native';
 import {NavigationProp} from '../navigation/NavigationProps';
 /** Consts */
 import {BASE_URL} from '../consts/Url';
@@ -17,7 +17,7 @@ interface Store {
   order_date: string;
   order_status: string;
   is_wished: boolean;
-  order_id : number;
+  order_id: number;
   store_name: string;
   store_logo: string;
   menus: Menu[];
@@ -35,23 +35,26 @@ export default function OrderHistory({
   const [historys, setHistorys] = useState<Store[]>([]);
   const [userName, setUserName] = useState<string>();
 
-  useEffect(() => {
-    const getSearchResult = async () => {
-      try {
-        const token = await getToken();
-        console.log(token);
-        const response = await axios.get(
-          `${BASE_URL}/orders/history?token=${token}`,
-        );
+  useFocusEffect(
+    React.useCallback(() => {
+      setHistorys([]);
+      getOrderHistory();
+    }, []),
+  );
 
-        setHistorys(response.data.order_history);
-        setUserName(response.data.user_name);
-      } catch (e) {
-        console.log('Search Result Error: ', e);
-      }
-    };
-    getSearchResult();
-  }, []);
+  const getOrderHistory = async () => {
+    try {
+      const token = await getToken();
+      const response = await axios.get(
+        `${BASE_URL}/orders/history?token=${token}`,
+      );
+
+      setHistorys(response.data.order_history);
+      setUserName(response.data.user_name);
+    } catch (e) {
+      console.log('Search Result Error: ', e);
+    }
+  };
 
   const updateWishStatus = (storeId: number, newStatus: boolean) => {
     setHistorys(prevHistory =>
@@ -93,7 +96,7 @@ export default function OrderHistory({
               store_logo={history.store_logo}
               is_wished={history.is_wished}
               storeId={history.store_id}
-              orderId ={history.order_id}
+              orderId={history.order_id}
               updateWishStatus={updateWishStatus} // 상태 업데이트 함수 전달
             />
           );

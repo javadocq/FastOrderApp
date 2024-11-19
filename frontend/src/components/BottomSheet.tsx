@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, Dimensions} from 'react-native';
+import {View} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,11 +8,11 @@ import Animated, {
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
-  ScrollView,
 } from 'react-native-gesture-handler';
 /** Components */
 import OrderHistory from '../components/OrderHistory';
 import StoreInfo from '../components/StoreInfo';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {NavigationProp} from '../navigation/NavigationProps';
 import styles from '../styles/BottomSheet';
@@ -27,14 +27,14 @@ interface CombinedInterface extends NavigationProp {
 
 export default function BottomSheet({
   navigation,
-  storeId,
+  storeId: parentStoreId,
 }: CombinedInterface): React.JSX.Element {
   const MAX_HEIGHT = LIST_ITEM_HEIGHT * 2; // 최상단 높이
   const MID_HEIGHT = LIST_ITEM_HEIGHT; // 중간 높이
   const MIN_HEIGHT = HANDLE_HEIGHT; // 최하단 높이
 
   const heightValue = useSharedValue(MID_HEIGHT); // 초기 높이 설정
-  const handlePosition = useSharedValue(MID_HEIGHT); // 핸들의 Y 위치
+  const [storeId, setStoreId] = useState<number | null>(null); // 내부 storeId 상태
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -44,12 +44,9 @@ export default function BottomSheet({
 
   const handleGesture = (event: PanGestureHandlerGestureEvent) => {
     const translationY = event.nativeEvent.translationY;
-
-    // 드래그 거리의 일부만 사용하여 높이를 업데이트
     const dragFactor = 0.2; // 드래그 반응 비율 조정
     const newHeight = heightValue.value - translationY * dragFactor;
 
-    // 새로운 높이가 MIN_HEIGHT와 MAX_HEIGHT 사이에 있는지 확인
     if (newHeight > MAX_HEIGHT) {
       heightValue.value = MAX_HEIGHT;
     } else if (newHeight < MIN_HEIGHT) {
@@ -60,7 +57,6 @@ export default function BottomSheet({
   };
 
   const handleGestureEnd = () => {
-    // 드래그가 끝났을 때 높이에 따라 고정
     if (heightValue.value > MAX_HEIGHT - 100) {
       heightValue.value = withTiming(MAX_HEIGHT, {duration: 100});
     } else if (heightValue.value > MID_HEIGHT - 150) {
@@ -69,6 +65,20 @@ export default function BottomSheet({
       heightValue.value = withTiming(MIN_HEIGHT, {duration: 100});
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // 화면이 포커스를 받을 때 storeId를 0으로 설정
+      setStoreId(0);
+    }, []),
+  );
+
+  // 부모 컴포넌트에서 storeId가 변경될 때마다 상태 업데이트
+  React.useEffect(() => {
+    if (parentStoreId) {
+      setStoreId(parentStoreId);
+    }
+  }, [parentStoreId]);
 
   return (
     <View style={styles.container}>
@@ -80,10 +90,10 @@ export default function BottomSheet({
             <View style={styles.handle} />
           </View>
         </PanGestureHandler>
-        {storeId ? (
-          <StoreInfo navigation={navigation} storeId={storeId} />
-        ) : (
+        {storeId === 0 ? (
           <OrderHistory navigation={navigation} />
+        ) : (
+          <StoreInfo navigation={navigation} storeId={storeId} />
         )}
       </Animated.View>
     </View>
