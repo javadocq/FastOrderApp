@@ -68,9 +68,10 @@ export default function Pay({ navigation, route }: PayProps):React.JSX.Element {
                 const cartItems = await getItem('cartItems');
                 if (cartItems) {
                     setOrderMenu(JSON.parse(cartItems));
+                    console.log(JSON.parse(cartItems)[0].store_id);
+                    setStoreId(JSON.parse(cartItems)[0].store_id);
                 }
-                setStoreId(orderMenu[0]?.store_id);
-                console.log(orderMenu[0]?.store_id)
+
             } catch (error) {
                 console.error("Failed to fetch cart items:", error);
             }

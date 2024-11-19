@@ -7,6 +7,7 @@ import {
   SafeAreaView, 
   TouchableOpacity,
   Image,
+  Linking
 } from 'react-native';
 import { NavigationProp, RouteProp } from '../navigation/NavigationProps'; 
 import { BASE_URL } from '../consts/Url';
@@ -59,7 +60,7 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
   useEffect(() => {
         const getFetchStoreMenu = async () => {
             try {
-              const token = await getToken(); 
+              const token = await getToken();
               const response = await axios.get(`${BASE_URL}/stores/id/${storeId}?token=${token}`);
               const formattedMenu = await response.data.menu_data;
               setLikeChecked(response.data.is_wished);
@@ -105,6 +106,14 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
     postFetchStoreLike();
   }
 
+  // 전화 걸기 핸들러
+  const handlePhoneCall = () => {
+    if (store?.phone_number) {
+      const phoneUrl = `tel:${store.phone_number}`;  // 'tel:' URI 사용
+      Linking.openURL(phoneUrl).catch(err => console.error("Error launching phone call:", err));
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -147,7 +156,9 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
               <View style={styles.phoneImg}>
               <Phone />
               </View>
-              <Text style={styles.storePhoneNumber}>{store?.phone_number}</Text>
+              <TouchableOpacity style={styles.storePhoneNumber} onPress={handlePhoneCall}>
+                <Text style={styles.storePhoneNumber}>{store?.phone_number}</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -155,13 +166,13 @@ export default function Store({ navigation, route }: StoreProps): React.JSX.Elem
 
           <View style={styles.menuWrap}>
             {menu.map((item, index) => (
-              <TouchableOpacity key={index} style={styles.menu} onPress={() => handleMenuInfo(item?.no)}>
+              <TouchableOpacity key={index} style={styles.menu} onPress={() => handleMenuInfo(item.no)}>
                 <View style={styles.menuBox}>
-                  <Text style={styles.menuName}>{item?.name}</Text>
-                  <Text style={styles.menuPrice}>{`${formatPrice(item?.price)}원`}</Text>
+                  <Text style={styles.menuName}>{item.name}</Text>
+                  <Text style={styles.menuPrice}>{`${formatPrice(item.price)}원`}</Text>
                 </View>
                 <View style={styles.menuImg}>
-                  <Image source={{uri : item?.image}} style={{height : '100%', width : '100%'}}/>
+                  <Image source={{uri : item.image}} style={{height : '100%', width : '100%'}}/>
                 </View>
               </TouchableOpacity>
             ))}
