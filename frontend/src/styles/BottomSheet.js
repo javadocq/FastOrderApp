@@ -19,8 +19,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     paddingHorizontal: 23,
-    borderWidth: 1,
-    borderColor: 'rgba(183, 183, 183, 0.50)',
+
+    shadowColor: 'rgba(0, 0, 0, 0.10)', //ios
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.1,
+    shadowRadius: 126,
   },
   handleBox: {
     display: 'flex',
