@@ -12,6 +12,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  dateText: {
+    color: '#222',
+    fontWeight: '400',
+    fontSize: 16,
+  },
+  progressText: {
+    color: '#22222280',
+    fontSize: 16,
+    fontWeight: '400',
+  },
   closeIcon: {
     height: 15,
     justifyContent: 'center',
