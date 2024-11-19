@@ -19,7 +19,12 @@ const styles = StyleSheet.create({
   rightContainer: {
     position: 'absolute',
     right: 35,
-    top: 14.7,
+    top: 4,
+  },
+  cartIconBox: {
+    height: 32,
+    width: 33,
+    // borderWidth: 1,
   },
 });
 

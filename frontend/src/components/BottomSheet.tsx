@@ -29,7 +29,7 @@ export default function BottomSheet({
   navigation,
   storeId: parentStoreId,
 }: CombinedInterface): React.JSX.Element {
-  const MAX_HEIGHT = LIST_ITEM_HEIGHT * 2; // 최상단 높이
+  const MAX_HEIGHT = LIST_ITEM_HEIGHT * 2.4; // 최상단 높이
   const MID_HEIGHT = LIST_ITEM_HEIGHT; // 중간 높이
   const MIN_HEIGHT = HANDLE_HEIGHT; // 최하단 높이
 

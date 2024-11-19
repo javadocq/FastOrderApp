@@ -12,6 +12,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  dateText: {
+    color: '#222',
+    fontWeight: '400',
+    fontSize: 16,
+  },
+  progressText: {
+    color: '#22222280',
+    fontSize: 16,
+    fontWeight: '400',
+  },
   closeIcon: {
     height: 15,
     justifyContent: 'center',
@@ -77,7 +87,7 @@ const styles = StyleSheet.create({
   },
   orderButton: {
     marginTop: 9,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#F55442',
     borderRadius: 5,
     height: 43,
     display: 'flex',
@@ -86,7 +96,9 @@ const styles = StyleSheet.create({
   },
   orderText: {
     fontSize: 18,
-    color: '#484747',
+    color: '#fff',
+    color: 'white',
+    fontWeight: '600',
   },
   divider: {
     marginTop: 15.44,

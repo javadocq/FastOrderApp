@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Alert} from 'react-native';
+import {Alert, LogBox} from 'react-native';
 import 'react-native-gesture-handler';
 
 import Login from './src/pages/Login';
@@ -24,6 +24,10 @@ import {Provider as PaperProvider} from 'react-native-paper';
 const Stack = createStackNavigator();
 
 export default function App(): React.JSX.Element {
+  useEffect(() => {
+    LogBox.ignoreAllLogs(); // 모든 경고 무시
+  }, []);
+
   return (
     <PaperProvider>
       <NavigationContainer>

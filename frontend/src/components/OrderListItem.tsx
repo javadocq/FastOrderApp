@@ -107,8 +107,8 @@ export default function OrderListItem({
     <View>
       <View style={styles.dateContainer}>
         <View style={styles.dateWrapper}>
-          <Text>{date}</Text>
-          <Text> • {progress}</Text>
+          <Text style={styles.dateText}>{date}</Text>
+          <Text style={styles.progressText}> • {progress}</Text>
         </View>
       </View>
       <View style={styles.historyContainer}>
