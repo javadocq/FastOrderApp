@@ -34,6 +34,7 @@ interface CartItem {
 type ShoppingProps = NavigationProp & RouteProp;
 
 export default function Shopping({ navigation, route }: ShoppingProps): React.JSX.Element {
+    const orderId = route.params?.orderId; 
     const [orderMenu, setOrderMenu] = useState<CartItem[]>([]);
     const [storeTitle, setStoreTitle] = useState<string>('');
 
@@ -145,7 +146,7 @@ export default function Shopping({ navigation, route }: ShoppingProps): React.JS
     };
 
     const handlePayPage = () => {
-        navigation.navigate('Pay');
+        navigation.navigate('Pay', { orderId });
     };
 
     const handleBack = () => {

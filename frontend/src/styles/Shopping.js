@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     wrap: {
         width: '100%',
         alignItems: 'center',
+        marginBottom : 90,
     },
     storeName: {
         marginTop: 23,

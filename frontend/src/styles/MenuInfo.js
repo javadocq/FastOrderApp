@@ -1,18 +1,18 @@
 import { StyleSheet } from "react-native"
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        backgroundColor : '#FFF',
-      },
-      wrap : {
-        width : '100%',
-        height : '100%', 
-      },
+  container : {
+    flexGrow : 1,
+    backgroundColor : '#FFF'
+  },
+  wrap: {
+    width : '100%',
+    position :'relative',
+  },
       storeBox: {
-        height: '10%',
         width: '100%',
         justifyContent : 'center',
+        height : 60,
         alignItems : 'center'
       },
       InfoBox : {
@@ -32,6 +32,12 @@ const styles = StyleSheet.create({
         fontSize : 20,
         fontStyle : 'normal',
         fontWeight : '600',
+      },
+      menuBox : {
+        marginTop: "2%", 
+        gap: 20, 
+        marginBottom: "2%", 
+        alignItems : 'center',
       },
       padding: {
         width: '100%',
@@ -93,6 +99,7 @@ const styles = StyleSheet.create({
         justifyContent : 'space-between',
         width : '85%',
         marginLeft : '8%',
+        marginBottom : 90,
       },
       count: {
         borderWidth: 1,
@@ -108,7 +115,6 @@ const styles = StyleSheet.create({
       },
       countIcon : {
         width : '20%',
-        height : '100%',
         alignItems : 'center',
         justifyContent : 'center'
       },
@@ -118,7 +124,6 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '500',
       },
-
 });
 
 export default styles;

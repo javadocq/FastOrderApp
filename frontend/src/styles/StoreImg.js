@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   storeImgContainer: {
     width: '100%',
-    height: 250,
+    height: 200,
     backgroundColor: '#FFF',
     position: 'relative',
   },

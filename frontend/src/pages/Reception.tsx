@@ -153,7 +153,7 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <ScrollView >
                 <View style={styles.wrap}>
                     <TopTitle name="접수내역" onPress={handleBack} />
 
@@ -171,7 +171,7 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
                             <View style={{width : '85%'}}>
                                 <Text style={styles.lableText}>{`${orderMenu?.user_name}님의 주문이 준비중이예요`}</Text>
                                 <View style={styles.inputBox}>
-                                <Text style={styles.inputText}>{`${orderMenu?.ready_time_at.toString().slice(11,13)}시:${orderMenu?.ready_time_at.toString().slice(14,16)}분 완료 예정`}</Text>
+                                <Text style={styles.inputText}>{`${orderMenu?.ready_time_at.toString().slice(11,13)}시 ${orderMenu?.ready_time_at.toString().slice(14,16)}분 완료 예정`}</Text>
                                 </View>
                             </View>
                         ) : (
@@ -213,7 +213,7 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
                         </View>
                     </View>
 
-                    <View style={{width : '85%'}}>
+                    <View style={{width : '85%', marginBottom : 90}}>
                         <Text style={styles.lableText}>가게 요청사항</Text>
                         <View style={styles.inputBox}>
                             <Text style={styles.inputText}>{orderMenu?.order_notes}</Text>
@@ -221,7 +221,7 @@ export default function Reception({ navigation, route }: ReceptionProps): React.
                     </View>
                 </View>
             </ScrollView>
-            <BottomButton name="홈으로 돌아가기" onPress={handleMoveMain} checked={true} color="#EC424C"/>
+                <BottomButton name="홈으로 돌아가기" onPress={handleMoveMain} checked={true} color="#EC424C"/>
         </SafeAreaView>
     )
 }

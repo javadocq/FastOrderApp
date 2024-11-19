@@ -208,76 +208,83 @@ export default function MenuInfo({ navigation, route }: MenuInfoProps): React.JS
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.wrap}>
-                <StoreImg onBack={() => navigation.goBack()} onShopping={() => navigation.navigate("Shopping")} img={menu?.image} />
-                {menu && (
-                    <View style={styles.storeBox}>
-                        <View style={styles.InfoBox}>
-                            <Text style={styles.menuName}>{menu.name}</Text>
-                            <TouchableOpacity onPress={() => handleLike()}>
-                                {likeChecked ? <FullLike /> : <EmptyLike />}
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )}
-
-                <View style={styles.padding}></View>
-
-                {options.map((option, idx) => (
-                    <View key={idx} style={{ marginTop: "5%", gap: 20, marginBottom: "5%", alignItems : 'center' }}>
-                        <View style={styles.flavoursBox}>
-                            <Text style={styles.price}>{option.option.title}</Text>
-                            <View style={option.option.is_required === "required" ? styles.round : styles.detailRound}>
-                                <Text>{option.option.is_required === "required" ? "필수" : "선택"}</Text>
+            <ScrollView
+                style={styles.wrap}
+                >
+                    <StoreImg onBack={() => navigation.goBack()} onShopping={() => navigation.navigate("Shopping")} img={menu?.image} />
+                        {menu && (
+                            <View style={styles.storeBox}>
+                                <View style={styles.InfoBox}>
+                                    <Text style={styles.menuName}>{menu.name}</Text>
+                                    <TouchableOpacity onPress={() => handleLike()}>
+                                        {likeChecked ? <FullLike /> : <EmptyLike />}
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                        {option.details.map((detail) => (
-                            <View key={detail.no} style={styles.flavoursBox}>
-                                { option.option.is_required === "required" ? 
-                                    (
-                                <TouchableOpacity
-                                    style={styles.wrapper}
-                                    onPress={() => handleToggleOption(detail.title, option.option.no, option.option.is_duplicate_allowed, option.option.is_required)}
-                                >
-                                    {selectedOptions[`${option.option.no}_${detail.title}`] ? <CheckedBox /> : <UnCheckedBox />}
-                                    <Text style={styles.flavoursPrice}>{detail.title}</Text>
-                                </TouchableOpacity>
-                                ) : (
-                                <TouchableOpacity
-                                    style={styles.wrapper}
-                                    onPress={() => handleToggleOption(detail.title, option.option.no, option.option.is_duplicate_allowed, option.option.is_required)}
-                                >
-                                    {selectedOptions[`${option.option.no}_${detail.title}`] ? <CheckedEclips/> : <EmptyEclips />}
-                                    <Text style={styles.flavoursPrice}>{detail.title}</Text>
-                                </TouchableOpacity>)
-                                }
+                        )}
 
-                                <Text style={styles.flavoursPrice}>{`${formatPrice(detail.price)}원`}</Text>
+                        <View style={styles.padding}></View>
+
+                        {options.map((option, idx) => (
+                            <View key={idx} style={styles.menuBox}>
+                                <View style={styles.flavoursBox}>
+                                    <Text style={styles.price}>{option.option.title}</Text>
+                                    <View style={option.option.is_required === "required" ? styles.round : styles.detailRound}>
+                                        <Text>{option.option.is_required === "required" ? "필수" : "선택"}</Text>
+                                    </View>
+                                </View>
+                                {option.details.map((detail) => (
+                                    <View key={detail.no} style={styles.flavoursBox}>
+                                        { option.option.is_required === "required" ? 
+                                            (
+                                        <TouchableOpacity
+                                            style={styles.wrapper}
+                                            onPress={() => handleToggleOption(detail.title, option.option.no, option.option.is_duplicate_allowed, option.option.is_required)}
+                                        >
+                                            {selectedOptions[`${option.option.no}_${detail.title}`] ? <CheckedBox /> : <UnCheckedBox />}
+                                            <Text style={styles.flavoursPrice}>{detail.title}</Text>
+                                        </TouchableOpacity>
+                                        ) : (
+                                        <TouchableOpacity
+                                            style={styles.wrapper}
+                                            onPress={() => handleToggleOption(detail.title, option.option.no, option.option.is_duplicate_allowed, option.option.is_required)}
+                                        >
+                                            {selectedOptions[`${option.option.no}_${detail.title}`] ? <CheckedEclips/> : <EmptyEclips />}
+                                            <Text style={styles.flavoursPrice}>{detail.title}</Text>
+                                        </TouchableOpacity>)
+                                        }
+
+                                        <Text style={styles.flavoursPrice}>{`${formatPrice(detail.price)}원`}</Text>
+                                    </View>
+                                ))}
+                                <View style={styles.paddingSecond}></View>
                             </View>
                         ))}
-                        <View style={styles.paddingSecond}></View>
-                    </View>
-                ))}
 
-                <View style={styles.countBox}>
-                    <Text style={styles.countText}>수량</Text>
-                    <View style={styles.count}>
-                        <TouchableOpacity style={styles.countIcon} onPress={handleMinus}>
-                            <Minus />
-                        </TouchableOpacity>
-                        <Text style={styles.countText}>{count}</Text>
-                        <TouchableOpacity style={styles.countIcon} onPress={handlePlus}>
-                            <Plus />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </ScrollView>
-            <BottomButton
-                name={`${formatPrice(calculateTotalPrice())}원 담기`}
-                onPress={handleOrder}
-                checked={count > 0 && (options.some(option => option.option.is_required === "required") ? selectedFlavor !== "" && selectedFlavor !== "필수 항목이 없음" : true)}
-                color="#EC424C"
-            />
+                        <View style={styles.countBox}>
+                            <Text style={styles.countText}>수량</Text>
+                            <View style={styles.count}>
+                                <TouchableOpacity style={styles.countIcon} onPress={handleMinus}>
+                                    <Minus />
+                                </TouchableOpacity>
+                                <Text style={styles.countText}>{count}</Text>
+                                <TouchableOpacity style={styles.countIcon} onPress={handlePlus}>
+                                    <Plus />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                </ScrollView>
+                    <BottomButton
+                        name={`${formatPrice(calculateTotalPrice())}원 담기`}
+                        onPress={handleOrder}
+                        checked={
+                            count > 0 &&
+                            (options.some((option) => option.option.is_required === "required")
+                                ? selectedFlavor !== "" && selectedFlavor !== "필수 항목이 없음"
+                                : true)
+                        }
+                        color="#EC424C"
+                    />
         </SafeAreaView>
     );
 }

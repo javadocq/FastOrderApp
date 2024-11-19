@@ -9,7 +9,7 @@ import {
     Modal,
     TextInput,
 } from 'react-native';
-import { NavigationProp } from '../navigation/NavigationProps';
+import { NavigationProp, RouteProp } from '../navigation/NavigationProps';
 import { BASE_URL } from '../consts/Url';
 import NextArrow from '../assets/icon_next_arrow.svg';
 import CheckedEclips from '../assets/icon_checked_eclips.svg';
@@ -41,11 +41,14 @@ interface CartItem {
     Count: number;
     Price: number;
     Option: Option[];
-    store_id?: number; // Optional field since it's only present in some items
+    store_id: number // Optional field since it's only present in some items
 }
 
+type PayProps = NavigationProp & RouteProp;
 
-export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
+export default function Pay({ navigation, route }: PayProps):React.JSX.Element {
+    const orderId = route.params.orderId;
+    const [storeId, setStoreId] = useState<number>(0);
     const [peopleModalVisible, setPeopleModalVisible] = useState<boolean>(false);
     const [requestText, setRequestText] = useState<string>('');
     const [checked, setChecked] = useState<boolean>(false); //다음에도 사용
@@ -56,7 +59,7 @@ export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
     const [pickupChecked, setPickupChecked] = useState<boolean>(false); //픽업 체크
     const [orderMenu, setOrderMenu] = useState<CartItem[]>([]);
     const [userPoint, setUserPoint] = useState<number>(0);
-    const [orderId, setOrderId] = useState<number>(0);
+
     
  
     useEffect(() => {
@@ -66,18 +69,43 @@ export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
                 if (cartItems) {
                     setOrderMenu(JSON.parse(cartItems));
                 }
+                setStoreId(orderMenu[0]?.store_id);
+                console.log(orderMenu[0]?.store_id)
             } catch (error) {
                 console.error("Failed to fetch cart items:", error);
             }
         };
-
-        fetchCartItems();
+        if(orderId) {
+            fetchOrderDetails(route.params.orderId);
+        } else {
+            fetchCartItems();
+        }
     }, []);
+
+    const fetchOrderDetails = async (order_id: number) => {
+        try {
+            const token = await getToken();
+            const response = await axios.get(`${BASE_URL}/user/oneOrderHistory`, {
+                params: {
+                    token: token,
+                    order_id: order_id
+                }
+            });
+
+            const order_data  = await response.data.items;
+            console.log(order_data);
+            setOrderMenu(order_data);
+            setStoreId(order_data[0].store_id);
+        } catch (error) {
+            console.error("주문 정보 가져오기 실패:", error);
+        }
+    };
+
 
     const postFetchAll = async () => {
         const token = await getToken();
         const orderPayload = {
-            store_id: orderMenu[0]?.store_id,
+            store_id: storeId,
             token: token, //여기서 처리
             order_type: storeChecked ? "매장식사" : "픽업", //여기서 처리
             people_count: selectedCount, //여기서 처리
@@ -86,13 +114,13 @@ export default function Pay({ navigation }: NavigationProp):React.JSX.Element {
             cost_total: totalPrice,
             cost_coupon: 0, //여기서 처리
         };
-
+        console.log(orderPayload);
         try {
             const response = await axios.post(`${BASE_URL}/orders/new-order`, orderPayload);
             const newOrderId = response.data.order_id; // 새로운 orderId 저장
-            setOrderId(newOrderId); // 상태 업데이트
             await setItem('cartItems', JSON.stringify([])); // 빈 배열로 초기화
             // navigation.navigate에서 newOrderId 사용
+            console.log('삭제완료');
             navigation.navigate('Reception', { orderId: newOrderId });
         } catch (error) {
             console.error("Error posting order:", error);
