@@ -65,6 +65,22 @@ export default function Shopping({ navigation, route }: ShoppingProps): React.JS
         }
     }, []);
 
+    useEffect(() => {
+        const getFetchMenu = async () => {
+            if (orderMenu.length > 0 && orderMenu[0].store_id) {
+                try {
+                    const token = await getToken();
+                    const response = await axios.get(`${BASE_URL}/stores/id/${orderMenu[0].store_id}?token=${token}`);
+                    setStoreTitle(response.data.store_data.store_name);
+                    console.log(response.data);
+                } catch (error) {
+                    console.error("Error fetching menu info:", error);
+                }
+            }
+        };
+        getFetchMenu();
+    }, [orderMenu]); 
+
     const fetchOrderDetails = async (order_id: number) => {
         console.log(order_id);
         try {
