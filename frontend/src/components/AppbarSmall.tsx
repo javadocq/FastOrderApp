@@ -1,7 +1,7 @@
-import {View, Text} from 'react-native';
-/**Icons */
-import CartIcon from '@assets/icon_cart.svg';
-/**Styles */
+import {View, Text, TouchableOpacity} from 'react-native';
+/** Components */
+import ShoppingCartIcon from '../components/ShoppingCartIcon';
+/** Styles */
 import styles from '../styles/AppbarSmall';
 import {NavigationProp} from '../navigation/NavigationProps';
 
@@ -22,7 +22,11 @@ export default function AppbarSmall({
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.rightContainer}>
-        <CartIcon onPress={navigateToShopping} />
+        <TouchableOpacity
+          style={styles.cartIconBox}
+          onPress={navigateToShopping}>
+          <ShoppingCartIcon color="Black" />
+        </TouchableOpacity>
       </View>
     </View>
   );
