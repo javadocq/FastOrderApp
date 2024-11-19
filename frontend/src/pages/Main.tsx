@@ -27,7 +27,8 @@ import BottomSheet from '../components/BottomSheet';
 import NaverMap from '../components/NaverMap';
 import SearchView from '../components/SearchView';
 import SearchResultView from '../components/SearchResultView';
-import { setSearch } from '../components/SearchStorage';
+import {setSearch} from '../components/SearchStorage';
+import ShoppingCartIcon from '../components/ShoppingCartIcon';
 
 // 아이콘 매핑 정의
 const foodIcons = {
@@ -141,7 +142,12 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
             value={searchText} // 텍스트 상태 바인딩
             onSubmitEditing={() => setSearch(searchText)}
           />
-          <CartIcon onPress={navigateToShopping} />
+          {/* <CartIcon onPress={navigateToShopping} /> */}
+          <TouchableOpacity
+            style={styles.cartIconBox}
+            onPress={navigateToShopping}>
+            <ShoppingCartIcon color="Black" />
+          </TouchableOpacity>
         </View>
         {/* 키보드가 안 보일 때 칩그룹 숨기기 */}
         {isKeyboardVisible ? (
@@ -175,9 +181,9 @@ export default function Main({navigation}: NavigationProp): React.JSX.Element {
       </View>
       {isKeyboardVisible ? (
         searchText.length > 0 ? (
-          <SearchResultView navigation={navigation} searchText={searchText}/>
+          <SearchResultView navigation={navigation} searchText={searchText} />
         ) : (
-          <SearchView  setSearchText={setSearchText}/>
+          <SearchView setSearchText={setSearchText} />
         )
       ) : (
         <>

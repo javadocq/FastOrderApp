@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 13,
   },
+  cartIconBox: {
+    height: 32,
+    width: 33,
+  },
   buttonGroup: {
     gap: 6,
   },
