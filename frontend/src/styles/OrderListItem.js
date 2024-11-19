@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   orderButton: {
     marginTop: 9,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#F55442',
     borderRadius: 5,
     height: 43,
     display: 'flex',
@@ -86,7 +86,9 @@ const styles = StyleSheet.create({
   },
   orderText: {
     fontSize: 18,
-    color: '#484747',
+    color: '#fff',
+    color: 'white',
+    fontWeight: '600',
   },
   divider: {
     marginTop: 15.44,
