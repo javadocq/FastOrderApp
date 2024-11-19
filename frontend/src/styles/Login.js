@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
       fontWeight : '500',
     },
     input: {
-      height: '7%',
-      width: '85%',
+      height: 60,
+      width: 330,
       borderColor: '#FFF',
       backgroundColor : '#F4F4F4',
       borderWidth: 1,
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
       fontSize : 16
     },
     buttonBox: {
-      height: '7%',
-      width: '85%',
+      height: 60,
+      width: 330,
       backgroundColor: '#1B1B1B',
       borderRadius: 50,
       justifyContent: 'center',
